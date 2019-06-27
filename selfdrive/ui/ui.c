@@ -193,6 +193,8 @@ typedef struct UIState {
   int font_sans_regular;
   int font_sans_semibold;
   int font_sans_bold;
+  int font_miui_regular;
+  int font_miui_bold;
   int img_wheel;
   int img_turn;
   int img_face;
@@ -531,6 +533,10 @@ static void ui_init(UIState *s) {
   assert(s->font_sans_semibold >= 0);
   s->font_sans_bold = nvgCreateFont(s->vg, "sans-bold", "../assets/fonts/opensans_bold.ttf");
   assert(s->font_sans_bold >= 0);
+  s->font_miui_regular = nvgCreateFont(s->vg, "miui-regular", "/system/fonts/Miui-Regular.ttf");
+  assert(s->font_miui_regular >= 0);
+  s->font_miui_bold = nvgCreateFont(s->vg, "miui-bold", "/system/fonts/Miui-Bold.ttf");
+  assert(s->font_miui_bold >= 0);
 
   assert(s->img_wheel >= 0);
   s->img_wheel = nvgCreateImage(s->vg, "../assets/img_chffr_wheel.png", 1);
@@ -1434,23 +1440,23 @@ static void ui_draw_vision_alert(UIState *s, int va_size, int va_color,
   nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
 
   if (va_size == ALERTSIZE_SMALL) {
-    nvgFontFace(s->vg, "sans-semibold");
+    nvgFontFace(s->vg, "miui-bold");
     nvgFontSize(s->vg, 40*2.5);
     nvgText(s->vg, alr_x+alr_w/2, alr_y+alr_h/2+15, va_text1, NULL);
   } else if (va_size== ALERTSIZE_MID) {
-    nvgFontFace(s->vg, "sans-bold");
+    nvgFontFace(s->vg, "miui-bold");
     nvgFontSize(s->vg, 48*2.5);
     nvgText(s->vg, alr_x+alr_w/2, alr_y+alr_h/2-45, va_text1, NULL);
-    nvgFontFace(s->vg, "sans-regular");
+    nvgFontFace(s->vg, "miui-regular");
     nvgFontSize(s->vg, 36*2.5);
     nvgText(s->vg, alr_x+alr_w/2, alr_y+alr_h/2+75, va_text2, NULL);
   } else if (va_size== ALERTSIZE_FULL) {
     nvgFontSize(s->vg, (longAlert1?72:96)*2.5);
-    nvgFontFace(s->vg, "sans-bold");
+    nvgFontFace(s->vg, "miui-bold");
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     nvgTextBox(s->vg, alr_x, alr_y+(longAlert1?360:420), alr_w-60, va_text1, NULL);
     nvgFontSize(s->vg, 48*2.5);
-    nvgFontFace(s->vg, "sans-regular");
+    nvgFontFace(s->vg, "miui-regular");
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_BOTTOM);
     nvgTextBox(s->vg, alr_x, alr_h-(longAlert1?300:360), alr_w-60, va_text2, NULL);
   }

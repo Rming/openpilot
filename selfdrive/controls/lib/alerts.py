@@ -1,3 +1,5 @@
+# This Python file uses the following encoding: utf-8
+# -*- coding: utf-8 -*-
 from cereal import car, log
 
 # Priority
