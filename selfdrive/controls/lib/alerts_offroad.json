@@ -1,19 +1,19 @@
 {
   "Offroad_ChargeDisabled": {
-    "text": "EON charging disabled after car being off for more than 3 days. Turn ignition on to start charging again.",
+    "text": "3天没有启动车辆，切断 EON 供电，车辆再次启动后，EON 恢复充电。",
     "severity": 0
   },
   "Offroad_TemperatureTooHigh": {
-    "text": "EON temperature too high. System won't start.",
+    "text": "EON 温度过高，系统暂不可用。",
     "severity": 1
   },
   "Offroad_ConnectivityNeededPrompt": {
-    "text": "Connect to internet to check for updates. openpilot won't engage in ",
+    "text": "请联网并检查更新，openpilot 暂不可用",
     "severity": 0,
     "_comment": "Append the number of days at the end of the text"
   },
   "Offroad_ConnectivityNeeded": {
-    "text": "Connect to internet to check for updates. openpilot won't engage.",
+    "text": "请联网并检查更新，openpilot 暂不可用",
     "severity": 1
   }
 }
