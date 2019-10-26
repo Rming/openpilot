@@ -1,3 +1,7 @@
+Version 0.6.5.1 (2019-10-26)
+========================
+ * 优化中文翻译
+
 Version 0.6.5 (2019-10-07)
 ========================
  * NEOS update: upgrade to Python3 and new installer!

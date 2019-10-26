@@ -84,28 +84,28 @@ ALERTS = [
 
   Alert(
       "steerSaturated",
-      "接管控制",
-      "弯道超过方向盘转向限制",
+      "请求接管",
+      "超出方向盘转向限制",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., 2., 3.),
 
   Alert(
       "steerTempUnavailable",
-      "接管控制",
-      "转向控制暂时失效",
+      "请求接管",
+      "自动转向暂时不可用",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimeWarning1, .4, 2., 3.),
 
   Alert(
       "steerTempUnavailableMute",
-      "接管控制",
-      "转向控制暂时失效",
+      "请求接管",
+      "自动转向暂时不可用",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .2, .2, .2),
 
   Alert(
       "preDriverDistracted",
-      "注意路况: 驾驶分心",
+      "注意路况: 注意力不集中",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
@@ -113,112 +113,112 @@ ALERTS = [
   Alert(
       "promptDriverDistracted",
       "注意路况",
-      "驾驶分心",
+      "注意力不集中",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarning2, .1, .1, .1),
 
   Alert(
       "driverDistracted",
-      "立即解除",
-      "驾驶分心",
+      "系统退出",
+      "注意力不集中",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGH, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, .1, .1),
 
   Alert(
       "preDriverUnresponsive",
-      "请触碰方向盘：无驾驶监控",
+      "请手扶方向盘：没有检测到驾驶员",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
 
   Alert(
       "promptDriverUnresponsive",
-      "触碰方向盘",
-      "驾驶没有反应",
+      "请手扶方向盘",
+      "驾驶员没有响应",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarning2, .1, .1, .1),
 
   Alert(
       "driverUnresponsive",
-      "立即解除",
-      "驾驶没有反应",
+      "系统退出",
+      "驾驶员没有响应",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGH, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, .1, .1),
 
   Alert(
       "driverMonitorOff",
-      "驾驶监控暂时停用",
-      "监控准确率：低",
+      "驾驶员检测暂时不可用",
+      "准确率较低",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .4, 0., 4.),
 
   Alert(
       "driverMonitorOn",
-      "驾驶监控已启用",
-      "监控准确率：高",
+      "驾驶员检测可用",
+      "准确率较高",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .4, 0., 4.),
 
   Alert(
       "geofence",
-      "DISENGAGEMENT REQUIRED",
-      "不在地理围栏区域之内",
+      "请求退出",
+      "当前国家或地区不可用",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.HIGH, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, .1, .1),
 
   Alert(
       "startup",
-      "随时准备好接管",
-      "请您将手放在方向盘上并持续注意路况",
+      "准备好随时接管",
+      "请手扶方向盘并时刻注意路况",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
 
   Alert(
       "startupNoControl",
       "行车记录模式",
-      "请您将手放在方向盘上并持续注意路况",
+      "请手扶方向盘并时刻注意路况",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
 
   Alert(
       "startupNoCar",
-      "行车记录模式 (尚未支援车种)",
-      "请您将手放在方向盘上并持续注意路况",
+      "行车记录模式 (暂不支持的车型)",
+      "请手扶方向盘并时刻注意路况",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
 
   Alert(
       "ethicalDilemma",
-      "接管控制 IMMEDIATELY",
+      "立即接管",
       "Ethical Dilemma Detected",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 1., 3., 3.),
 
   Alert(
       "steerTempUnavailableNoEntry",
-      "无法使用 openpilot",
-      "转向控制暂时失效",
+      "系统不可用",
+      "自动转向暂时不可用",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 0., 3.),
 
   Alert(
       "manualRestart",
-      "接管控制",
-      "请自行恢复驾驶",
+      "请求接管",
+      "请手动恢复行驶",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "resumeRequired",
-      "已停止",
-      "请按 RES 继续",
+      "已停车",
+      "请按 RES 键继续行驶",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "belowSteerSpeed",
-      "接管控制",
-      "转向控制暂时失效，车速低于  ",
+      "请求接管",
+      "自动转向暂不可用，车速低于  ",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.none, 0., 0.4, .3),
 
@@ -232,255 +232,255 @@ ALERTS = [
   # Non-entry only alerts
   Alert(
       "wrongCarModeNoEntry",
-      "无法使用 openpilot",
-      "主开关关闭",
+      "系统不可用",
+      "主开关已关闭",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 0., 3.),
 
   Alert(
       "dataNeededNoEntry",
-      "无法使用 openpilot",
-      "需要更多的数据来协助校准，请将行车记录上传后再试",
+      "系统不可用",
+      "需要更多的校准数据，请上传后重试",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 0., 3.),
 
   Alert(
       "outOfSpaceNoEntry",
-      "无法使用 openpilot",
-      "储存空间不足",
+      "系统不可用",
+      "存储空间不足",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 0., 3.),
 
   Alert(
       "pedalPressedNoEntry",
-      "无法使用 openpilot",
-      "Pedal Pressed During Attempt",
+      "系统不可用",
+      "刹车踏板已踩下",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, "brakePressed", AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "speedTooLowNoEntry",
-      "无法使用 openpilot",
+      "系统不可用",
       "车速过慢",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "brakeHoldNoEntry",
-      "无法使用 openpilot",
-      "驻车煞车已启用",
+      "系统不可用",
+      "制动保持已启动",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "parkBrakeNoEntry",
-      "无法使用 openpilot",
-      "电子驻车已启动",
+      "系统不可用",
+      "停车制动已启动",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "lowSpeedLockoutNoEntry",
-      "无法使用 openpilot",
-      "巡航系统错误：请重新发动车子",
+      "系统不可用",
+      "巡航系统故障：请重新启动车辆",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "lowBatteryNoEntry",
-      "无法使用 openpilot",
+      "系统不可用",
       "电池电量过低",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "sensorDataInvalidNoEntry",
-      "无法使用 openpilot",
-      "没有收到任何来自 EON 传感器的资料",
+      "系统不可用",
+      "EON 传感器数据缺失",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "soundsUnavailableNoEntry",
-      "无法使用 openpilot",
+      "系统不可用",
       "找不到音效装置",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "tooDistractedNoEntry",
-      "无法使用 openpilot",
-      "驾驶分心次数过高",
+      "系统不可用",
+      "注意力高度不集中",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   # Cancellation alerts causing soft disabling
   Alert(
       "overheat",
-      "接管控制 IMMEDIATELY",
+      "立即接管",
       "系统过热",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "wrongGear",
-      "接管控制 IMMEDIATELY",
-      "车子不在 D 档",
+      "立即接管",
+      "请切换到 D 档",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "calibrationInvalid",
-      "接管控制 IMMEDIATELY",
-      "校准无效：请将 EON 放于新的位置并重新校准",
+      "立即接管",
+      "校准失败：请调整 EON 的位置后重新校准",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "calibrationIncomplete",
-      "接管控制 IMMEDIATELY",
-      "正在校准相机中",
+      "立即接管",
+      "正在校准摄像头",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "doorOpen",
-      "接管控制 IMMEDIATELY",
-      "车门开启",
+      "立即接管",
+      "车门已开启",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "seatbeltNotLatched",
-      "接管控制 IMMEDIATELY",
-      "安全带未繫",
+      "立即接管",
+      "安全带未系好",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "espDisabled",
-      "接管控制 IMMEDIATELY",
-      "ESP 关闭",
+      "立即接管",
+      "ESP 已关闭",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "lowBattery",
-      "接管控制 IMMEDIATELY",
+      "立即接管",
       "电池电量过低",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "commIssue",
-      "接管控制 IMMEDIATELY",
-      "程序间出现通讯问题",
+      "立即接管",
+      "进程通讯异常",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "radarCanError",
-      "接管控制 IMMEDIATELY",
-      "雷达讯号错误：请重新发动车子",
+      "立即接管",
+      "雷达系统故障：请重新启动车辆",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "radarFault",
-      "接管控制 IMMEDIATELY",
-      "雷达讯号错误：请重新发动车子",
+      "立即接管",
+      "雷达系统故障：请重新启动车辆",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   Alert(
       "posenetInvalid",
-      "接管控制 IMMEDIATELY",
-      "视觉错误：请检查相机",
+      "立即接管",
+      "视觉检测故障：请检查摄像头",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
   # Cancellation alerts causing immediate disabling
   Alert(
       "controlsFailed",
-      "接管控制 IMMEDIATELY",
-      "控制发生错误",
+      "立即接管",
+      "车辆控制故障",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 1., 3., 4.),
 
   Alert(
       "controlsMismatch",
-      "接管控制 IMMEDIATELY",
-      "控制不匹配",
+      "立即接管",
+      "车辆控制不符",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 1., 3., 4.),
 
   Alert(
       "canError",
-      "接管控制 IMMEDIATELY",
-      "CAN 讯号错误：请检查接线",
+      "立即接管",
+      "CAN 总线故障：请检查数据线连接",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 1., 3., 4.),
 
   Alert(
       "steerUnavailable",
-      "接管控制 IMMEDIATELY",
-      "LKAS 错误：请重新发动车子",
+      "立即接管",
+      "LKAS 故障：请重新启动车辆",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 1., 3., 4.),
 
   Alert(
       "brakeUnavailable",
-      "接管控制 IMMEDIATELY",
-      "巡航系统错误：请重新发动车子",
+      "立即接管",
+      "巡航系统故障：请重新启动车辆",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 1., 3., 4.),
 
   Alert(
       "gasUnavailable",
-      "接管控制 IMMEDIATELY",
-      "油门错误：请重新发动车子",
+      "立即接管",
+      "油门故障：请重新启动车辆",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 1., 3., 4.),
 
   Alert(
       "reverseGear",
-      "接管控制 IMMEDIATELY",
-      "切换至倒车档",
+      "立即接管",
+      "当前在 R 档",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 1., 3., 4.),
 
   Alert(
       "cruiseDisabled",
-      "接管控制 IMMEDIATELY",
-      "巡航系统关闭",
+      "立即接管",
+      "巡航系统已关闭",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 1., 3., 4.),
 
   Alert(
       "plannerError",
-      "接管控制 IMMEDIATELY",
-      "Planner Solution 错误",
+      "立即接管",
+      "路径规划失败",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 1., 3., 4.),
 
   # not loud cancellations (user is in control)
   Alert(
       "noTarget",
-      "openpilot 已取消",
-      "没有侦测到前车",
+      "系统已退出",
+      "没有检测到前车",
       AlertStatus.normal, AlertSize.mid,
       Priority.HIGH, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
   Alert(
       "speedTooLow",
-      "openpilot 已取消",
+      "系统已退出",
       "车速过慢",
       AlertStatus.normal, AlertSize.mid,
       Priority.HIGH, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
   Alert(
       "invalidGiraffeHonda",
-      "Giraffe 开关错误",
+      "Giraffe 配置错误",
       "openpilot 模式为 0111，原厂模式为 1011",
       AlertStatus.normal, AlertSize.mid,
       Priority.HIGH, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
@@ -488,232 +488,232 @@ ALERTS = [
   # Cancellation alerts causing non-entry
   Alert(
       "overheatNoEntry",
-      "无法使用 openpilot",
+      "系统不可用",
       "系统过热",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "wrongGearNoEntry",
-      "无法使用 openpilot",
-      "车子不在 D 档",
+      "系统不可用",
+      "请切换到 D 档",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "calibrationInvalidNoEntry",
-      "无法使用 openpilot",
-      "校准无效：请将 EON 放于新的位置并重新校准",
+      "系统不可用",
+      "校准失败：请调整 EON 的位置后重新校准",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "calibrationIncompleteNoEntry",
-      "无法使用 openpilot",
-      "正在校准相机中",
+      "系统不可用",
+      "正在校准摄像头",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "doorOpenNoEntry",
-      "无法使用 openpilot",
-      "车门未关",
+      "系统不可用",
+      "车门已开启",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "seatbeltNotLatchedNoEntry",
-      "无法使用 openpilot",
-      "安全带未系",
+      "系统不可用",
+      "安全带未系好",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "espDisabledNoEntry",
-      "无法使用 openpilot",
-      "ESP 关闭",
+      "系统不可用",
+      "ESP 已关闭",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "geofenceNoEntry",
-      "无法使用 openpilot",
-      "不在地理围栏区域之内",
+      "系统不可用",
+      "当前国家或地区不可用",
       AlertStatus.normal, AlertSize.mid,
       Priority.MID, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "radarCanErrorNoEntry",
-      "无法使用 openpilot",
-      "雷达讯号错误：请重新发动车子",
+      "系统不可用",
+      "雷达系统故障：请重新启动车辆",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "radarFaultNoEntry",
-      "无法使用 openpilot",
-      "雷达讯号错误：请重新发动车子",
+      "系统不可用",
+      "雷达系统故障：请重新启动车辆",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "posenetInvalidNoEntry",
-      "无法使用 openpilot",
-      "视觉错误：请检查相机",
+      "系统不可用",
+      "视觉检测故障：请检查摄像头",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "controlsFailedNoEntry",
-      "无法使用 openpilot",
-      "控制发生错误",
+      "系统不可用",
+      "车辆控制故障",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "canErrorNoEntry",
-      "无法使用 openpilot",
-      "CAN 讯号错误：请检查接线",
+      "系统不可用",
+      "CAN 总线故障：请检查数据线连接",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "steerUnavailableNoEntry",
-      "无法使用 openpilot",
-      "LKAS 错误：请重新发动车子",
+      "系统不可用",
+      "LKAS 故障：请重新启动车辆",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "brakeUnavailableNoEntry",
-      "无法使用 openpilot",
-      "巡航系统错误：请重新发动车子",
+      "系统不可用",
+      "巡航系统故障：请重新启动车辆",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "gasUnavailableNoEntry",
-      "无法使用 openpilot",
-      "油门错误：请重新发动车子",
+      "系统不可用",
+      "油门故障：请重新启动车辆",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "reverseGearNoEntry",
-      "无法使用 openpilot",
-      "切换至倒车档",
+      "系统不可用",
+      "当前在 R 档",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "cruiseDisabledNoEntry",
-      "无法使用 openpilot",
-      "巡航系统关闭",
+      "系统不可用",
+      "巡航系统已关闭",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "noTargetNoEntry",
-      "无法使用 openpilot",
-      "没有侦测到前车",
+      "系统不可用",
+      "没有检测到前车",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "plannerErrorNoEntry",
-      "无法使用 openpilot",
-      "Planner Solution 错误",
+      "系统不可用",
+      "路径规划失败",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
       "invalidGiraffeHondaNoEntry",
-      "无法使用 openpilot",
+      "系统不可用",
       "openpilot 模式为 0111，原厂模式为 1011",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
   Alert(
       "commIssueNoEntry",
-      "无法使用 openpilot",
-      "程序间出现通讯问题",
+      "系统不可用",
+      "进程通讯异常",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
   Alert(
       "internetConnectivityNeededNoEntry",
-      "无法使用 openpilot",
-      "需要网路连线",
+      "系统不可用",
+      "需要连接到网络",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
   # permanent alerts
   Alert(
       "steerUnavailablePermanent",
-      "LKAS 错误：请重新发动车子",
+      "LKAS 故障：请重新启动车辆",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "brakeUnavailablePermanent",
-      "巡航系统错误：请重新发动车子",
+      "巡航系统故障：请重新启动车辆",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "lowSpeedLockoutPermanent",
-      "巡航系统错误：请重新发动车子",
+      "巡航系统故障：请重新启动车辆",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "calibrationIncompletePermanent",
-      "正在校准相机中: ",
+      "正在校准摄像头: ",
       "车速请高于 ",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "invalidGiraffeHondaPermanent",
-      "Giraffe 开关错误",
+      "Giraffe 配置错误",
       "openpilot 模式为 0111，原厂模式为 1011",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "invalidGiraffeToyotaPermanent",
-      "未支援的 Giraffe 设置",
-      "请查阅 comma.ai/tg",
+      "Giraffe 配置不可用",
+      "请查看 comma.ai/tg",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "internetConnectivityNeededPermanent",
-      "需要网路连线",
-      "请先检查更新才能启用",
+      "需要连接到网络",
+      "检查更新后才能启用",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "sensorDataInvalidPermanent",
-      "没有收到任何来自 EON 传感器的资料",
-      "请重启您的 EON",
+      "EON 传感器数据缺失",
+      "请重启 EON",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "soundsUnavailablePermanent",
       "找不到音效装置",
-      "请重启您的 EON",
+      "请重启 EON",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "vehicleModelInvalid",
-      "车子参数识别失败",
+      "车型参数获取失败",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOWEST, VisualAlert.steerRequired, AudibleAlert.none, .0, .0, .1),
