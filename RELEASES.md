@@ -1,3 +1,7 @@
+Version 0.6.6.1 (2019-11-08)
+ * Fix fan control when not plugged into panda
+ * Fix unicode bug in DoUninstall reading
+
 Version 0.6.6 (2019-11-05)
 ========================
  * Volkswagen support thanks to jyoung8607!
