@@ -1,3 +1,8 @@
+Version 0.6.6.2 (2019-11-12)
+ * Add fingerprint (2019 Chinese Levin Hybrid)
+ * Make DBC preprocessing deterministic
+ * Make visiond compile on pc 
+
 Version 0.6.6.1 (2019-11-08)
  * Fix fan control when not plugged into panda
  * Fix unicode bug in DoUninstall reading
