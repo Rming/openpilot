@@ -1,6 +1,6 @@
 {
   "Offroad_ChargeDisabled": {
-    "text": "3天没有启动车辆，切断 EON 供电，车辆再次启动后，EON 恢复充电。",
+    "text": "车辆熄火 30 小时后将停止为 EON 充电，再次启动车辆后，EON 恢复充电。",
     "severity": 0
   },
   "Offroad_TemperatureTooHigh": {
@@ -8,20 +8,24 @@
     "severity": 1
   },
   "Offroad_ConnectivityNeededPrompt": {
-    "text": "请联网并检查更新，openpilot 暂不可用",
+    "text": "请立即连网检查更新，否则 openpilot 将不可用。",
     "severity": 0,
     "_comment": "Append the number of days at the end of the text"
   },
   "Offroad_ConnectivityNeeded": {
-    "text": "请联网并检查更新，openpilot 暂不可用",
+    "text": "请连网并检查更新，连网更新后才能正常使用。",
     "severity": 1
   },
   "Offroad_PandaFirmwareMismatch": {
-    "text": "Unexpected panda firmware version. System won't start. Reboot your EON to reflash panda.",
+    "text": "Panda 固件版本异常，系统无法启用，请重启 EON 并更新 Panda 固件。",
     "severity": 1
   },
   "Offroad_InvalidTime": {
-    "text": "Invalid date and time settings, system won't start. Connect to internet to set time.",
+    "text": "系统时间设置错误，系统无法启用。 请连网更新时间设置。",
     "severity": 1
+  },
+  "Offroad_IsTakingSnapshot": {
+    "text": "拍摄相机快照中，系统即将启动。",
+    "severity": 0
   }
 }

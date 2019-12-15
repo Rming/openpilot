@@ -228,6 +228,33 @@ ALERTS = [
       "",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .1, .1, .1),
+  Alert(
+      "preLaneChangeLeft",
+      "往左打方向盘开始切换车道",
+      "请注意其他车辆",
+      AlertStatus.normal, AlertSize.mid,
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
+
+  Alert(
+      "preLaneChangeRight",
+      "往右打方向盘开始切换车道",
+      "请注意其他车辆",
+      AlertStatus.normal, AlertSize.mid,
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
+
+  Alert(
+      "laneChange",
+      "切换车道中",
+      "请注意其他车辆",
+      AlertStatus.normal, AlertSize.mid,
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1),
+
+  Alert(
+      "posenetInvalid",
+      "请求接管",
+      "视觉模型输出不明确",
+      AlertStatus.userPrompt, AlertSize.mid,
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimeWarning1, .4, 2., 3.),
 
   # Non-entry only alerts
   Alert(
@@ -392,10 +419,11 @@ ALERTS = [
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
+
   Alert(
-      "posenetInvalid",
+      "lowMemory",
       "立即接管",
-      "视觉检测故障：请检查摄像头",
+      "内存过低: 请重启 EON",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
@@ -478,13 +506,6 @@ ALERTS = [
       AlertStatus.normal, AlertSize.mid,
       Priority.HIGH, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
-  Alert(
-      "invalidGiraffeHonda",
-      "Giraffe 配置错误",
-      "openpilot 模式为 0111，原厂模式为 1011",
-      AlertStatus.normal, AlertSize.mid,
-      Priority.HIGH, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
-
   # Cancellation alerts causing non-entry
   Alert(
       "overheatNoEntry",
@@ -559,7 +580,7 @@ ALERTS = [
   Alert(
       "posenetInvalidNoEntry",
       "系统不可用",
-      "视觉检测故障：请检查摄像头",
+      "视觉模型输出不明确",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
@@ -627,20 +648,6 @@ ALERTS = [
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
   Alert(
-      "invalidGiraffeHondaNoEntry",
-      "系统不可用",
-      "openpilot 模式为 0111，原厂模式为 1011",
-      AlertStatus.normal, AlertSize.mid,
-      Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
-
-  Alert(
-      "invalidGiraffeToyotaNoEntry",
-      "openpilot Unavailable",
-      "Visit comma.ai/tg",
-      AlertStatus.normal, AlertSize.mid,
-      Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
-
-  Alert(
       "commIssueNoEntry",
       "系统不可用",
       "进程通讯异常",
@@ -651,6 +658,13 @@ ALERTS = [
       "internetConnectivityNeededNoEntry",
       "系统不可用",
       "需要连接到网络",
+      AlertStatus.normal, AlertSize.mid,
+      Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
+
+  Alert(
+      "lowMemoryNoEntry",
+      "系统不可用",
+      "内存过低: 请重启 EON",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
@@ -684,13 +698,6 @@ ALERTS = [
       Priority.LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
-      "invalidGiraffeHondaPermanent",
-      "Giraffe 配置错误",
-      "openpilot 模式为 0111，原厂模式为 1011",
-      AlertStatus.normal, AlertSize.mid,
-      Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
-
-  Alert(
       "invalidGiraffeToyotaPermanent",
       "Giraffe 配置不可用",
       "请查看 comma.ai/tg",
@@ -703,6 +710,13 @@ ALERTS = [
       "检查更新后才能启用",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
+
+  Alert(
+      "communityFeatureDisallowedPermanent",
+      "检测到社区功能",
+      "请在开发者设置中启用社区功能",
+      AlertStatus.normal, AlertSize.mid,
+      Priority.LOW, VisualAlert.none, AudibleAlert.none, 0., 0., .2),  # LOW priority to overcome Cruise Error
 
   Alert(
       "sensorDataInvalidPermanent",
@@ -719,9 +733,24 @@ ALERTS = [
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
+      "lowMemoryPermanent",
+      "内存严重不足",
+      "请重启 EON",
+      AlertStatus.normal, AlertSize.mid,
+      Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
+
+  Alert(
       "vehicleModelInvalid",
       "车型参数获取失败",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOWEST, VisualAlert.steerRequired, AudibleAlert.none, .0, .0, .1),
+
+  # offroad alerts
+  Alert(
+      "ldwPermanent",
+      "请求接管",
+      "车道偏离警告",
+      AlertStatus.userPrompt, AlertSize.mid,
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., 2., 3.),
 ]
