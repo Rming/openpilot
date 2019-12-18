@@ -16,10 +16,15 @@ function launch {
 
   # apply update
   if [ "$(git rev-parse HEAD)" != "$(git rev-parse @{u})" ]; then
-    git reset --hard @{u} &&
-    git clean -xdf &&
-
-    exec "${BASH_SOURCE[0]}"
+    files_change=$(git diff HEAD @{u} --name-only|awk '!/^apk\/*/&&!/^RE*/{print $0}'|wc -l)
+    if [ $files_change -gt 0 ]; then
+      git reset --hard @{u} &&
+      git clean -xdf &&
+      exec "${BASH_SOURCE[0]}"
+    else
+      git reset --hard @{u} &&
+      exec "${BASH_SOURCE[0]}"
+    fi
   fi
 
   # no cpu rationing for now
