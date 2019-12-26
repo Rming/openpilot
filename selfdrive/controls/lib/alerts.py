@@ -84,8 +84,8 @@ ALERTS = [
 
   Alert(
       "fcwStock",
-      "BRAKE!",
-      "Risk of Collision",
+      "刹车!",
+      "有碰撞的风险",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.fcw, AudibleAlert.none, 1., 2., 2.),  # no EON chime for stock FCW
 
