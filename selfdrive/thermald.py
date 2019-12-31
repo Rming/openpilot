@@ -24,6 +24,9 @@ CURRENT_TAU = 15.   # 15s time constant
 DAYS_NO_CONNECTIVITY_MAX = 9999  # do not allow to engage after a week without internet
 DAYS_NO_CONNECTIVITY_PROMPT = 9999  # send an offroad prompt after 4 days with no internet
 
+# battery charge control
+CHARGE_BAT_PERCENT_MAX = 80
+CHARGE_BAT_PERCENT_MIN = 60
 
 with open(BASEDIR + "/selfdrive/controls/lib/alerts_offroad.json") as json_file:
   OFFROAD_ALERTS = json.load(json_file)
@@ -154,6 +157,8 @@ def thermald_thread():
   current_connectivity_alert = None
   time_valid_prev = True
   should_start_prev = False
+  usb_online_prev = False
+  charging_disabled = False
 
   is_uno = (read_tz(29, clip=False) < -1000)
   if is_uno:
@@ -323,6 +328,17 @@ def thermald_thread():
          started_seen and (sec_since_boot() - off_ts) > 60:
         os.system('LD_LIBRARY_PATH="" svc power shutdown')
 
+    # charge control ~70%
+    charging_disabled = False if msg.thermal.usbOnline and not usb_online_prev else charging_disabled
+    # battery low
+    if usb_power and charging_disabled and msg.thermal.batteryPercent < CHARGE_BAT_PERCENT_MIN:
+      charging_disabled = False
+      os.system('echo "1" > /sys/class/power_supply/battery/charging_enabled')
+    # battery high
+    if usb_power and not charging_disabled and msg.thermal.batteryPercent > CHARGE_BAT_PERCENT_MAX:
+      charging_disabled = True
+      os.system('echo "0" > /sys/class/power_supply/battery/charging_enabled')
+
     msg.thermal.chargingError = current_filter.x > 0. and msg.thermal.batteryPercent < 90  # if current is positive, then battery is being discharged
     msg.thermal.started = started_ts is not None
     msg.thermal.startedTs = int(1e9*(started_ts or 0))
@@ -339,7 +355,7 @@ def thermald_thread():
     usb_power_prev = usb_power
     fw_version_match_prev = fw_version_match
     should_start_prev = should_start
-
+    usb_online_prev = msg.thermal.usbOnline
     #print(msg)
 
     # report to server once per minute
