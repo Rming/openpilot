@@ -14,12 +14,12 @@ function launch {
   # Wifi scan
   wpa_cli IFNAME=wlan0 SCAN
 
+  DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
   # apply update
   if [ "$(git rev-parse HEAD)" != "$(git rev-parse @{u})" ]; then
     files_change=$(git diff HEAD @{u} --name-only|awk '!/^apk\/*/&&!/^RE*/{print $0}'|wc -l)
     if [ $files_change -gt 0 ]; then
-      git reset --hard @{u} &&
-      git clean -xdf &&
+      "$DIR/installer/updated_confirm/updated_confirm" &&
       exec "${BASH_SOURCE[0]}"
     else
       git reset --hard @{u} &&
@@ -34,7 +34,6 @@ function launch {
   echo 0-3 > /dev/cpuset/foreground/cpus
   echo 0-3 > /dev/cpuset/android/cpus
 
-  DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
   # Remove old NEOS update file
   if [ -d /data/neoupdate ]; then
