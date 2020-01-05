@@ -4,6 +4,7 @@
 #include <cassert>
 
 #include <unistd.h>
+#include <math.h>
 #include <sys/stat.h>
 #include <sys/statvfs.h>
 
@@ -47,7 +48,7 @@ bool check_battery() {
 
 
 struct UpdatedConfirm {
-  bool do_exit = false;
+  int count_down = 333;
 
   TouchState touch;
 
@@ -72,8 +73,8 @@ struct UpdatedConfirm {
   };
   UpdateState state;
 
-  std::string progress_text;
-  float progress_frac;
+  int count_num;
+  std::string cancel_text;
 
   std::string error_text;
 
@@ -240,10 +241,12 @@ struct UpdatedConfirm {
 
     switch (state) {
     case CONFIRMATION:
+      count_num = (int)ceil(count_down*30 /1000) + 1;
+      cancel_text = "暂时跳过 [" + std::to_string(count_num) + "]";
       draw_ack_screen("Openpilot 版本更新",
                       "当前 openpilot 分支代码有更新，更新内容已下载完毕，\r本次更新需要 10 分钟左右的编译时间。\r",
                       "编译升级",
-                      "暂时跳过");
+                      cancel_text.data());
       break;
     case LOW_BATTERY:
       draw_battery_screen();
@@ -271,7 +274,7 @@ struct UpdatedConfirm {
           }
         }
         if (touch_x >= balt_x && touch_x < balt_x+b_w && touch_y >= b_y && touch_y < b_y+b_h) {
-          do_exit = 1;
+          count_down = 0;
         }
       }
     }
@@ -282,7 +285,7 @@ struct UpdatedConfirm {
 
 
   void go() {
-    while (!do_exit) {
+    while (count_down > 1) {
       ui_update();
 
       glClearColor(0.08, 0.08, 0.08, 1.0);
@@ -309,6 +312,8 @@ struct UpdatedConfirm {
 
       // no simple way to do 30fps vsync with surfaceflinger...
       usleep(30000);
+      // countdown 3s to continue
+      count_down--;
     }
 
     if (update_thread_handle.joinable()) {
