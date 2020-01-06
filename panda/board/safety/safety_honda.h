@@ -17,6 +17,7 @@ bool honda_moving = false;
 bool honda_bosch_hardware = false;
 bool honda_alt_brake_msg = false;
 bool honda_fwd_brake = false;
+bool honda_allow_gas_press = true;
 
 static void honda_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
 
@@ -70,7 +71,7 @@ static void honda_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     int gas_interceptor = GET_INTERCEPTOR(to_push);
     if ((gas_interceptor > HONDA_GAS_INTERCEPTOR_THRESHOLD) &&
         (gas_interceptor_prev <= HONDA_GAS_INTERCEPTOR_THRESHOLD) &&
-        long_controls_allowed) {
+        long_controls_allowed && !honda_allow_gas_press) {
       controls_allowed = 0;
     }
     gas_interceptor_prev = gas_interceptor;
@@ -80,7 +81,7 @@ static void honda_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
   if (!gas_interceptor_detected) {
     if (addr == 0x17C) {
       int gas = GET_BYTE(to_push, 0);
-      if (gas && !(honda_gas_prev) && long_controls_allowed) {
+      if (gas && !(honda_gas_prev) && long_controls_allowed && !honda_allow_gas_press) {
         controls_allowed = 0;
       }
       honda_gas_prev = gas;
@@ -142,7 +143,7 @@ static int honda_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
 
   // disallow actuator commands if gas or brake (with vehicle moving) are pressed
   // and the the latching controls_allowed flag is True
-  int pedal_pressed = honda_gas_prev || (gas_interceptor_prev > HONDA_GAS_INTERCEPTOR_THRESHOLD) ||
+  int pedal_pressed = (!honda_allow_gas_press && honda_gas_prev) || (gas_interceptor_prev > HONDA_GAS_INTERCEPTOR_THRESHOLD) ||
                       (honda_brake_pressed_prev && honda_moving);
   bool current_controls_allowed = controls_allowed && !(pedal_pressed);
 
@@ -175,7 +176,7 @@ static int honda_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
   // GAS: safety check
   if (addr == 0x200) {
     if (!current_controls_allowed || !long_controls_allowed) {
-      if (GET_BYTE(to_send, 0) || GET_BYTE(to_send, 1)) {
+      if (!honda_allow_gas_press && (GET_BYTE(to_send, 0) || GET_BYTE(to_send, 1))) {
         tx = 0;
       }
     }
@@ -216,6 +217,7 @@ static int honda_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
   // fwd from car to camera. also fwd certain msgs from camera to car
   // 0xE4 is steering on all cars except CRV and RDX, 0x194 for CRV and RDX,
   // 0x1FA is brake control, 0x30C is acc hud, 0x33D is lkas hud,
+  // 0x39f is radar hud
   int bus_fwd = -1;
 
   if (!relay_malfunction) {
