@@ -34,6 +34,7 @@ uint32_t toyota_ts_last = 0;
 int toyota_cruise_engaged_last = 0;       // cruise state
 int toyota_gas_prev = 0;
 struct sample_t toyota_torque_meas;       // last 3 motor torques produced by the eps
+bool toyota_allow_gas_press = true;
 
 
 static void toyota_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
@@ -76,7 +77,7 @@ static void toyota_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     int gas_interceptor = GET_INTERCEPTOR(to_push);
     if ((gas_interceptor > TOYOTA_GAS_INTERCEPTOR_THRESHOLD) &&
         (gas_interceptor_prev <= TOYOTA_GAS_INTERCEPTOR_THRESHOLD) &&
-        long_controls_allowed) {
+        long_controls_allowed && !toyota_allow_gas_press) {
       controls_allowed = 0;
     }
     gas_interceptor_prev = gas_interceptor;
@@ -85,7 +86,7 @@ static void toyota_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
   // exit controls on rising edge of gas press
   if (addr == 0x2C1) {
     int gas = GET_BYTE(to_push, 6) & 0xFF;
-    if ((gas > 0) && (toyota_gas_prev == 0) && !gas_interceptor_detected && long_controls_allowed) {
+    if ((gas > 0) && (toyota_gas_prev == 0) && !gas_interceptor_detected && long_controls_allowed && !toyota_allow_gas_press) {
       controls_allowed = 0;
     }
     toyota_gas_prev = gas;
@@ -117,7 +118,7 @@ static int toyota_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
     // GAS PEDAL: safety check
     if (addr == 0x200) {
       if (!controls_allowed || !long_controls_allowed) {
-        if (GET_BYTE(to_send, 0) || GET_BYTE(to_send, 1)) {
+        if (!toyota_allow_gas_press && (GET_BYTE(to_send, 0) || GET_BYTE(to_send, 1))) {
           tx = 0;
         }
       }
