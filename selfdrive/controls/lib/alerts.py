@@ -758,6 +758,6 @@ ALERTS = [
       "ldwPermanent",
       "请求接管",
       "车道偏离警告",
-      AlertStatus.userPrompt, AlertSize.mid,
+      AlertStatus.userPrompt, AlertSize.none,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., 2., 3.),
 ]
