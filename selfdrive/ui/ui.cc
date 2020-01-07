@@ -261,6 +261,7 @@ typedef struct UIState {
   int is_metric_timeout;
   int longitudinal_control_timeout;
   int limit_set_speed_timeout;
+  int afa_ui_volume_multiple_timeout;
 
   bool controls_seen;
 
@@ -268,6 +269,7 @@ typedef struct UIState {
   bool is_metric;
   bool longitudinal_control;
   bool limit_set_speed;
+  float afa_ui_volume_multiple;
   float speed_lim_off;
   bool is_ego_over_limit;
   char alert_type[64];
@@ -690,11 +692,13 @@ static void ui_init_vision(UIState *s, const VisionStreamBufs back_bufs,
   read_param_bool(&s->is_metric, "IsMetric");
   read_param_bool(&s->longitudinal_control, "LongitudinalControl");
   read_param_bool(&s->limit_set_speed, "LimitSetSpeed");
+  read_param_float(&s->afa_ui_volume_multiple, "AfaUiVolumeMultiple");
 
   // Set offsets so params don't get read at the same time
   s->longitudinal_control_timeout = UI_FREQ / 3;
   s->is_metric_timeout = UI_FREQ / 2;
   s->limit_set_speed_timeout = UI_FREQ;
+  s->afa_ui_volume_multiple_timeout = UI_FREQ / 3 * 4;
 }
 
 // Projects a point in car to space to the corresponding point in full frame
@@ -2230,6 +2234,8 @@ int main(int argc, char* argv[]) {
       s->volume_timeout--;
     } else {
       int volume = fmin(MAX_VOLUME, MIN_VOLUME + s->scene.v_ego / 5);  // up one notch every 5 m/s
+      volume = volume * s->afa_ui_volume_multiple /100;
+      volume = volume > MAX_VOLUME? MAX_VOLUME : volume;
       set_volume(s, volume);
     }
 
@@ -2266,6 +2272,8 @@ int main(int argc, char* argv[]) {
     read_param_bool_timeout(&s->longitudinal_control, "LongitudinalControl", &s->longitudinal_control_timeout);
     read_param_bool_timeout(&s->limit_set_speed, "LimitSetSpeed", &s->limit_set_speed_timeout);
     read_param_float_timeout(&s->speed_lim_off, "SpeedLimitOffset", &s->limit_set_speed_timeout);
+
+    read_param_float_timeout(&s->afa_ui_volume_multiple, "AfaUiVolumeMultiple", &s->afa_ui_volume_multiple_timeout);
 
     pthread_mutex_unlock(&s->lock);
 

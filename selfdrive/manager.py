@@ -473,6 +473,9 @@ def main():
   if params.get("OpenpilotEnabledToggle") is None:
     params.put("OpenpilotEnabledToggle", "1")
 
+  if params.get("AfaUiVolumeMultiple") is None:
+    params.put("AfaUiVolumeMultiple", "0")
+
   # is this chffrplus?
   if os.getenv("PASSIVE") is not None:
     params.put("Passive", str(int(os.getenv("PASSIVE"))))
