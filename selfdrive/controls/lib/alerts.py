@@ -93,8 +93,8 @@ ALERTS = [
       "steerSaturated",
       "请求接管",
       "超出方向盘转向限制",
-      AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., 2., 3.),
+      AlertStatus.userPrompt, AlertSize.none,
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, 1., 2., 3.),
 
   Alert(
       "steerTempUnavailable",
