@@ -365,6 +365,7 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
 
   AM.process_alerts(sm.frame)
   CC.hudControl.visualAlert = AM.visual_alert
+  CC.hudControl.audibleAlert = AM.audible_alert
 
   if not read_only:
     # send car controls over can
