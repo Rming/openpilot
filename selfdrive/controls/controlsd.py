@@ -300,7 +300,7 @@ def state_control(frame, rcv_frame, plan, path_plan, CS, CP, state, events, v_cr
     left_deviation = actuators.steer > 0 and path_plan.dPoly[3] > 0.1
     right_deviation = actuators.steer < 0 and path_plan.dPoly[3] < -0.1
 
-    if left_deviation or right_deviation:
+    if (left_deviation or right_deviation) and CS.lkMode:
       AM.add(frame, "steerSaturated", enabled)
 
   # Parse permanent warnings to display constantly
