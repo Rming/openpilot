@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <assert.h>
+#include <time.h>
 #include <sys/mman.h>
 #include <sys/resource.h>
 
@@ -164,6 +165,7 @@ typedef struct UIScene {
 
   float awareness_status;
 
+  bool recording;
   float output_scale;
   bool steerOverride;
 
@@ -447,6 +449,13 @@ static const mat4 full_to_wide_frame_transform = {{
   0.0,  0.0, 0.0, 1.0,
 }};
 
+struct tm get_time_struct() {
+  time_t t = time(NULL);
+  struct tm tm = *localtime(&t);
+  return tm;
+}
+
+
 typedef struct {
   AudibleAlert alert;
   const char* uri;
@@ -681,6 +690,7 @@ static void ui_init_vision(UIState *s, const VisionStreamBufs back_bufs,
       .front_box_height = ui_info.front_box_height,
       .world_objects_visible = false,  // Invisible until we receive a calibration message.
       .gps_planner_active = false,
+      .recording = false,
   };
 
   s->rgb_width = back_bufs.width;
@@ -1458,6 +1468,74 @@ static void ui_draw_vision_brake(UIState *s) {
   nvgFill(s->vg);
 }
 
+static void ui_draw_dashcam_button(UIState *s) {
+  int btn_w = 150;
+  int btn_h = 150;
+  int btn_x = 1920 - btn_w;
+  int btn_y = 1080 - btn_h;
+  nvgBeginPath(s->vg);
+  nvgRoundedRect(s->vg, btn_x-110, btn_y-45, btn_w, btn_h, 100);
+  nvgStrokeColor(s->vg, nvgRGBA(255,255,255,80));
+  nvgStrokeWidth(s->vg, 6);
+  nvgStroke(s->vg);
+
+  nvgFontSize(s->vg, 70);
+
+  if (s->scene.recording) {
+    NVGcolor fillColor = nvgRGBA(255,0,0,150);
+    nvgFillColor(s->vg, fillColor);
+    nvgFill(s->vg);
+    nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
+  } else {
+    nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
+  }
+  nvgText(s->vg,btn_x-88,btn_y+50,"REC",NULL);
+}
+
+bool dashcam_button_clicked(int touch_x, int touch_y) {
+  if (touch_x >= 1660 && touch_x <= 1810) {
+    if (touch_y >= 885 && touch_y <= 1035) {
+      return true;
+    }
+  }
+  return false;
+}
+
+
+void toggle_dashcam_start() {
+  const char *dashcam_root = "/data/media/0/dashcam/";
+  char *env_dashcam_root = getenv("DASHCAM_ROOT");
+  dashcam_root = env_dashcam_root ? env_dashcam_root : dashcam_root;
+
+  // NOTE: make sure dashcam_root folder exists on the device!
+  struct stat st = {0};
+  if (stat(dashcam_root, &st) == -1) {
+    mkdir(dashcam_root, 0700);
+  }
+
+  char cmd[128];
+  char filename[64];
+  struct tm tm = get_time_struct();
+  snprintf(filename, sizeof(filename), "%04d%02d%02d_%02d%02d%02d.mp4", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+  snprintf(cmd, sizeof(cmd), "/data/openpilot/selfdrive/ui/screenrecord --bit-rate 2560000 %s%s&", dashcam_root, filename);
+
+  system(cmd);
+}
+
+void toggle_dashcam_stop() {
+  system("killall -SIGINT screenrecord");
+}
+
+void toggle_dashcam(UIState *s) {
+  if (s->scene.recording) {
+    toggle_dashcam_stop();
+    s->scene.recording = false;
+  } else {
+    toggle_dashcam_start();
+    s->scene.recording = true;
+  }
+}
+
 
 static void ui_draw_vision_header(UIState *s) {
   const UIScene *scene = &s->scene;
@@ -1714,6 +1792,7 @@ void handle_message(UIState *s, Message * msg) {
     s->scene.monitoring_active = datad.driverMonitoringOn;
     s->scene.steerOverride = datad.steerOverride;
     s->scene.output_scale = pdata.output;
+
 
     s->scene.frontview = datad.rearViewCam;
 
@@ -2297,6 +2376,7 @@ int main(int argc, char* argv[]) {
       ui_update(s);
       if(!s->vision_connected) {
         // Visiond process is just stopped, force a redraw to make screen blank again.
+        toggle_dashcam_stop();
         ui_draw(s);
         glFinish();
         should_swap = true;
@@ -2308,6 +2388,19 @@ int main(int argc, char* argv[]) {
       s->awake_timeout--;
     } else {
       set_awake(s, false);
+    }
+
+
+    //dashcam process manage
+    if (s->awake && s->vision_connected && s->active_app == cereal_UiLayoutState_App_home && s->status != STATUS_STOPPED) {
+      //dashcam button
+      ui_draw_dashcam_button(s);
+      //dashcam button clicked
+      int touch_x = -1, touch_y = -1;
+      int touched = touch_poll(&touch, &touch_x, &touch_y, s->awake ? 0 : 100);
+      if (dashcam_button_clicked(touch_x, touch_y)) {
+        toggle_dashcam(s);
+      }
     }
 
     // Don't waste resources on drawing in case screen is off or car is not started.
