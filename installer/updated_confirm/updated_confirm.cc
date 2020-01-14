@@ -30,22 +30,6 @@
 
 namespace {
 
-int battery_capacity() {
-  std::string bat_cap_s = util::read_file("/sys/class/power_supply/battery/capacity");
-  return atoi(bat_cap_s.c_str());
-}
-
-int battery_current() {
-  std::string current_now_s = util::read_file("/sys/class/power_supply/battery/current_now");
-  return atoi(current_now_s.c_str());
-}
-
-bool check_battery() {
-  int bat_cap = battery_capacity();
-  int current_now = battery_current();
-  return bat_cap > 35 || (current_now < 0 && bat_cap > 10);
-}
-
 
 struct UpdatedConfirm {
   int count_down = 333;
@@ -68,7 +52,6 @@ struct UpdatedConfirm {
   // i hate state machines give me coroutines already
   enum UpdateState {
     CONFIRMATION,
-    LOW_BATTERY,
     ERROR,
   };
   UpdateState state;
@@ -77,12 +60,6 @@ struct UpdatedConfirm {
   std::string cancel_text;
 
   std::string error_text;
-
-  std::string low_battery_text;
-  std::string low_battery_title;
-  std::string low_battery_context;
-  std::string battery_cap_text;
-  int min_battery_cap = 35;
 
   // button
   int b_x, b_w, b_y, b_h;
@@ -122,28 +99,12 @@ struct UpdatedConfirm {
     state = ERROR;
   }
 
-  void set_battery_low() {
-    std::lock_guard<std::mutex> guard(lock);
-    state = LOW_BATTERY;
-  }
-
   void set_confirmation() {
     std::lock_guard<std::mutex> guard(lock);
     state = CONFIRMATION;
   }
 
   void run_stages() {
-    if (!check_battery()) {
-      set_battery_low();
-      int battery_cap = battery_capacity();
-      while(battery_cap < min_battery_cap) {
-        battery_cap = battery_capacity();
-        battery_cap_text = std::to_string(battery_cap);
-        usleep(1000000);
-      }
-      set_confirmation();
-    }
-
     //clean and rebuild
     printf("git reset --hard\n");
     system("git -C /data/openpilot reset --hard @{u}");
@@ -152,10 +113,6 @@ struct UpdatedConfirm {
     //clean and rebuild
     printf("git clean -xdf\n");
     system("git -C /data/openpilot clean -xdf ");
-
-    //reboot
-    // printf("reboot");
-    // system("service call power 16 i32 0 i32 0 i32 1");
 
     exit(0);
   }
@@ -212,27 +169,6 @@ struct UpdatedConfirm {
     }
   }
 
-  void draw_battery_screen() {
-    low_battery_title = "Low Battery";
-    low_battery_text = "Please connect EON to your charger. Update will continue once EON battery reaches 35%.";
-    low_battery_context = "Current battery charge: " + battery_cap_text + "%";
-
-    nvgFillColor(vg, nvgRGBA(255,255,255,255));
-    nvgTextAlign(vg, NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE);
-
-    nvgFontFace(vg, "miui_bold");
-    nvgFontSize(vg, 120.0f);
-    nvgTextBox(vg, 110, 220, fb_w-240, low_battery_title.c_str(), NULL);
-
-    nvgFontFace(vg, "miui_regular");
-    nvgFontSize(vg, 86.0f);
-    nvgTextBox(vg, 130, 380, fb_w-260, low_battery_text.c_str(), NULL);
-
-    nvgFontFace(vg, "miui_bold");
-    nvgFontSize(vg, 86.0f);
-    nvgTextBox(vg, 130, 700, fb_w-260, low_battery_context.c_str(), NULL);
-  }
-
 
   void ui_draw() {
     std::lock_guard<std::mutex> guard(lock);
@@ -247,9 +183,6 @@ struct UpdatedConfirm {
                       "当前 openpilot 分支代码有更新，更新内容已下载完毕，\r本次更新需要 10 分钟左右的编译时间。\r",
                       "编译升级",
                       cancel_text.data());
-      break;
-    case LOW_BATTERY:
-      draw_battery_screen();
       break;
     case ERROR:
       draw_ack_screen("There was an error", (error_text).c_str(), NULL, "Reboot");
