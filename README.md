@@ -1,3 +1,5 @@
+<a href="#fork-preview"><img width="500" align="center" id="fork-preview" src="https://doc.sdut.me/files/afa_op.jpg"></a>
+
 Fork of openpilot
 =======================
 本 fork 是基于官方 openpilot 代码修改而来，新增、修改过程中会遵循以下原则：
@@ -12,9 +14,21 @@ Features
  * 新增部分已知车型指纹
  * 移除请连网更新的提示
  * 版本更新时可以在重启时跳过编译更新
- * 支持本田 Bosch 系列车型踩油门时不退出系统
- * 启用官方默认关闭的自动变道辅助功能（车速 > 70 km/h）
+ * 首次使用会自动刷写 panda 固件
+ * 支持本田车型踩油门时不退出系统
+ * 支持丰田车型踩油门时不退出系统
+ * 车道偏离警告只在原车仪表盘提示
+ * 转向超出扭矩限制警告只在原车仪表盘提示
+ * 可配置的 EON 警告提示音量，默认完全静音
+ * 启用官方默认关闭的自动变道辅助功能
+ * EON 界面使用渐变色显示行驶轨迹线
+ * EON 界面显示刹车状态、转向灯状态
+ * 优化本田原厂 ACC SnG 恢复功能
+ * 车辆启动后可以在 EON 界面开启/关闭行车录像
  * 自动删除三天以前的驾驶记录（车辆启动时）
+ * 如果剩余空间小于 15%，开始删旧的驾驶记录日志
+ * 如果剩余空间小于 10%，开始删旧的行车录像
+
 
 Usage
 =======================
@@ -36,7 +50,7 @@ Donation
 
 | Wechat | 
 | :------: |
-| <img width="150" src="https://doc.sdut.me/files/zan.jpg"> | 
+| <a href="#donation"><img width="150" src="https://doc.sdut.me/files/zan.jpg"> </a>| 
 
 捐助名单（按时间顺序）：
 
@@ -59,6 +73,9 @@ Acknowledgments
 * [Gernby/openpilot](https://github.com/gernby/openpilot)
 * [dragonpilot-community/dragonpilot](https://github.com/dragonpilot-community/dragonpilot)
 
+#### 站在巨人的肩膀上
+
+开发过程中，大部分功能参考了上述分支代码的功能实现，感谢开源。
 
 Licensing
 =======================
