@@ -213,6 +213,11 @@ static void ui_init_vision(UIState *s, const VisionStreamBufs back_bufs,
   s->afa_ui_volume_multiple_timeout = UI_FREQ / 3 * 4;
 }
 
+struct tm get_time_struct() {
+  time_t t = time(NULL);
+  struct tm tm = *localtime(&t);
+  return tm;
+}
 
 bool dashcam_button_clicked(int touch_x, int touch_y) {
   if (touch_x >= 1660 && touch_x <= 1810) {
