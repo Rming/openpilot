@@ -34,10 +34,10 @@ function launch {
     if [ $? -eq 0 ]; then
       echo "${BASEDIR} has been modified, skipping overlay update installation"
     else
-      $DIR/installer/updated_confirm/updated_confirm
-      if [ $? -eq 0 ]; then
-        if [ -f "${STAGING_ROOT}/finalized/.overlay_consistent" ]; then
-          if [ ! -d /data/safe_staging/old_openpilot ]; then
+      if [ -f "${STAGING_ROOT}/finalized/.overlay_consistent" ]; then
+        if [ ! -d /data/safe_staging/old_openpilot ]; then
+          ${BASEDIR}/installer/updated_confirm/updated_confirm
+          if [ $? -eq 0 ]; then
             echo "Valid overlay update found, installing"
             LAUNCHER_LOCATION="${BASH_SOURCE[0]}"
 
@@ -50,9 +50,11 @@ function launch {
             echo "Restarting launch script ${LAUNCHER_LOCATION}"
             exec "${LAUNCHER_LOCATION}"
           else
+            echo "skip update"
+          fi
+        else
             echo "openpilot backup found, not updating"
             # TODO: restore backup? This means the updater didn't start after swapping
-          fi
         fi
       fi
     fi
@@ -65,6 +67,7 @@ function launch {
   echo 0-3 > /dev/cpuset/foreground/cpus
   echo 0-3 > /dev/cpuset/android/cpus
 
+  DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
   # Remove old NEOS update file
   # TODO: move this code to the updater

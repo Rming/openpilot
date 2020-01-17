@@ -68,8 +68,7 @@ struct UpdatedConfirm {
   UpdatedConfirm() {
     touch_init(&touch);
 
-    fb = framebuffer_init("updated_confirm", 0x00001000, false,
-                          &display, &surface, &fb_w, &fb_h);
+    fb = framebuffer_init("updated_confirm", 0x00001000, false, &fb_w, &fb_h);
     assert(fb);
 
     vg = nvgCreateGLES3(NVG_ANTIALIAS | NVG_STENCIL_STROKES | NVG_DEBUG);
@@ -105,14 +104,14 @@ struct UpdatedConfirm {
   }
 
   void run_stages() {
-    //clean and rebuild
-    printf("git reset --hard\n");
-    system("git -C /data/openpilot reset --hard @{u}");
+    // //clean and rebuild
+    // printf("git reset --hard\n");
+    // system("git -C /data/openpilot reset --hard @{u}");
 
 
-    //clean and rebuild
-    printf("git clean -xdf\n");
-    system("git -C /data/openpilot clean -xdf ");
+    // //clean and rebuild
+    // printf("git clean -xdf\n");
+    // system("git -C /data/openpilot clean -xdf ");
 
     exit(0);
   }
@@ -180,7 +179,7 @@ struct UpdatedConfirm {
       count_num = (int)ceil(count_down*30 /1000) + 1;
       cancel_text = "暂时跳过 [" + std::to_string(count_num) + "]";
       draw_ack_screen("Openpilot 版本更新",
-                      "当前 openpilot 分支代码有更新，更新内容已下载完毕，\r本次更新需要 10 分钟左右的编译时间。\r",
+                      "当前 openpilot 分支代码有更新，更新内容已下载完毕，\r本次更新可能需要几分钟的编译时间。\r",
                       "编译升级",
                       cancel_text.data());
       break;
@@ -239,8 +238,8 @@ struct UpdatedConfirm {
 
       glDisable(GL_BLEND);
 
-      eglSwapBuffers(display, surface);
-
+      framebuffer_swap(fb);
+      
       assert(glGetError() == GL_NO_ERROR);
 
       // no simple way to do 30fps vsync with surfaceflinger...
