@@ -3,7 +3,7 @@ import os
 import shutil
 import threading
 from selfdrive.swaglog import cloudlog
-from selfdrive.loggerd.config import ROOT, DASHCAM_ROOT, get_available_percent, get_dirs_xdays_ago
+from selfdrive.loggerd.config import ROOT, DASHCAM_ROOT, get_available_bytes, get_dirs_xdays_ago
 from selfdrive.loggerd.uploader import listdir_by_creation
 
 def deleter_thread(exit_event):
@@ -13,10 +13,10 @@ def deleter_thread(exit_event):
         cloudlog.info("deleting %s" % delete_path)
         shutil.rmtree(delete_path, ignore_errors=True)
 
-    available_percent = get_available_percent()
-
     # deleting rlogs
-    if available_percent < 15.0:
+    available_bytes = get_available_bytes()
+    if available_bytes is not None and available_bytes < (8 * 1024 * 1024 * 1024):
+      # remove the earliest directory we can
       dirs = listdir_by_creation(ROOT)
       for delete_dir in dirs:
         delete_path = os.path.join(ROOT, delete_dir)
@@ -33,7 +33,7 @@ def deleter_thread(exit_event):
       exit_event.wait(.1)
 
     # deleting dashcam
-    if available_percent < 10.0:
+    if available_bytes is not None and available_bytes < (5 * 1024 * 1024 * 1024):
       dirs = listdir_by_creation(DASHCAM_ROOT)
       for delete_dir in dirs:
         delete_path = os.path.join(DASHCAM_ROOT, delete_dir)
@@ -46,7 +46,7 @@ def deleter_thread(exit_event):
       exit_event.wait(.1)
 
     # wait 30s
-    if available_percent >= 15.0:
+    if available_bytes >= (8 * 1024 * 1024 * 1024):
       exit_event.wait(30)
 
 

@@ -1,24 +1,11 @@
-Version update
+Version 0.7.1 (2020-01-20)
 ========================
- * 简体中文界面
- * 新增部分已知车型指纹
- * 移除请连网更新的提示
- * 版本更新时可以在重启时跳过编译更新
- * 首次使用会自动刷写 panda 固件
- * 支持本田车型踩油门时不退出系统
- * 支持丰田车型踩油门时不退出系统
- * 车道偏离警告只在原车仪表盘提示
- * 转向超出扭矩限制警告只在原车仪表盘提示
- * 可配置的 EON 警告提示音量，默认完全静音
- * 启用官方默认关闭的自动变道辅助功能
- * EON 界面使用渐变色显示行驶轨迹线
- * EON 界面显示刹车状态、转向灯状态
- * 优化本田原厂 ACC SnG 恢复功能
- * 车辆启动后可以在 EON 界面开启/关闭行车录像
- * 自动删除三天以前的驾驶记录（车辆启动时）
- * 如果剩余空间小于 15%，开始删旧的驾驶记录日志
- * 如果剩余空间小于 10%，开始删旧的行车录像
-
+ * comma two support!
+ * Lane Change Assist above 45 mph!
+ * Replace zmq with custom messaging library, msgq!
+ * Supercombo model: calibration and driving models are combined for better lead estimate
+ * More robust updater thanks to jyoung8607! Requires NEOS update
+ * Improve low speed ACC tuning
 
 Version 0.7 (2019-12-13)
 ========================

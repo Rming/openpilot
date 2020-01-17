@@ -408,7 +408,14 @@ ALERTS = [
   Alert(
       "commIssue",
       "立即接管",
-      "进程通讯异常",
+      "进程通信异常",
+      AlertStatus.critical, AlertSize.full,
+      Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
+
+  Alert(
+      "radarCommIssue",
+      "立即接管",
+      "雷达通信异常",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
@@ -657,7 +664,14 @@ ALERTS = [
   Alert(
       "commIssueNoEntry",
       "系统不可用",
-      "进程通讯异常",
+      "进程通信异常",
+      AlertStatus.normal, AlertSize.mid,
+      Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
+
+  Alert(
+      "radarCommIssueNoEntry",
+      "系统不可用",
+      "雷达通信异常",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
@@ -743,6 +757,13 @@ ALERTS = [
       "lowMemoryPermanent",
       "内存严重不足",
       "请重启 EON",
+      AlertStatus.normal, AlertSize.mid,
+      Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
+
+  Alert(
+      "carUnrecognizedPermanent",
+      "行车记录模式",
+      "未识别车型",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
