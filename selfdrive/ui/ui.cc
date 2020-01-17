@@ -237,7 +237,8 @@ void toggle_dashcam_start() {
   // NOTE: make sure dashcam_root folder exists on the device!
   struct stat st = {0};
   if (stat(dashcam_root, &st) == -1) {
-    mkdir(dashcam_root, 0700);
+    umask(0);
+    mkdir(dashcam_root, 0777);
   }
 
   char cmd[128];
