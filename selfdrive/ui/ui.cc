@@ -966,10 +966,12 @@ int main(int argc, char* argv[]) {
     if (s->awake && s->vision_connected) {
 
       //dashcam button clicked
-      int touch_x = -1, touch_y = -1;
-      int touched = touch_poll(&touch, &touch_x, &touch_y, s->awake ? 0 : 100);
-      if (dashcam_button_clicked(touch_x, touch_y)) {
-        toggle_dashcam(s);
+      if (s->active_app == cereal_UiLayoutState_App_home && s->status != STATUS_STOPPED) {
+        int touch_x = -1, touch_y = -1;
+        int touched = touch_poll(&touch, &touch_x, &touch_y, s->awake ? 0 : 100);
+        if (dashcam_button_clicked(touch_x, touch_y)) {
+          toggle_dashcam(s);
+        }
       }
 
       ui_draw(s);

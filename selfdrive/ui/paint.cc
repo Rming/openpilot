@@ -787,7 +787,8 @@ static void ui_draw_dashcam_button(UIState *s) {
   int btn_w = 150;
   int btn_h = 150;
   int btn_x = 1920 - btn_w;
-  int btn_y = 1080 - btn_h;
+  int btn_y = 1080 - btn_h - 50;
+
   nvgBeginPath(s->vg);
   nvgRoundedRect(s->vg, btn_x-110, btn_y-45, btn_w, btn_h, 100);
   nvgStrokeColor(s->vg, nvgRGBA(255,255,255,80));
@@ -804,7 +805,7 @@ static void ui_draw_dashcam_button(UIState *s) {
   } else {
     nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
   }
-  nvgText(s->vg,btn_x-88,btn_y+50,"REC",NULL);
+  nvgText(s->vg,btn_x-38,btn_y+50,"REC",NULL);
 }
 
 static void ui_draw_vision_header(UIState *s) {
