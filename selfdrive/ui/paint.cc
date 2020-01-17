@@ -611,7 +611,7 @@ static void ui_draw_vision_speed(UIState *s) {
   nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 200));
 
   if (s->is_metric) {
-    nvgText(s->vg, viz_speed_x+viz_speed_w/2, 320, "kph", NULL);
+    nvgText(s->vg, viz_speed_x+viz_speed_w/2, 320, "km/h", NULL);
   } else {
     nvgText(s->vg, viz_speed_x+viz_speed_w/2, 320, "mph", NULL);
   }
