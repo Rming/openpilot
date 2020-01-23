@@ -102,6 +102,7 @@ keys = {
   "Offroad_IsTakingSnapshot": [TxType.CLEAR_ON_MANAGER_START],
 
   "AfaUiVolumeMultiple": [TxType.PERSISTENT],
+  "AfaCameraOffset": [TxType.PERSISTENT],
 }
 
 

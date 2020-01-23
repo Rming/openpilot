@@ -496,6 +496,8 @@ def main():
 
   if params.get("AfaUiVolumeMultiple") is None:
     params.put("AfaUiVolumeMultiple", "0")
+  if params.get("AfaCameraOffset") is None:
+    params.put("AfaCameraOffset", "6")
 
   # is this chffrplus?
   if os.getenv("PASSIVE") is not None:

@@ -1,8 +1,10 @@
 from common.numpy_fast import interp
 import numpy as np
 from cereal import log
+from common.params import Params
+params = Params()
 
-CAMERA_OFFSET = 0.06  # m from center car to camera
+CAMERA_OFFSET = int(params.get("AfaCameraOffset", encoding='utf8')) * 0.01
 
 def compute_path_pinv(l=50):
   deg = 3
