@@ -1,8 +1,11 @@
-Version Update (2020-01-24)
+Version 0.7.2 (2020-02-07)
 ========================
- * 设置界面可修改媒体音量，默认完全静音
- * 设置界面可修改相机偏移，默认左偏 6 厘米
- * 移除系统时间必须大于 2019 年的限制
+ * 基于ECU固件版本的指纹识别（丰田、本田车型）
+ * 更新驾驶模型: 改善弯道和车道变换期间的路径预测并更好地追踪前车车速
+ * 改善极端光线条件下的驾驶员监控，添加无法准确监控的警告
+ * 支持丰田 Rav4 2019 混动（感谢 illumiN8i）
+ * 支持雷克萨斯 RX 2016, 2017, 2020（感谢 illumiN8i）
+ * 支持克莱斯勒 Pacifica 2020 混动（感谢 adhintz）
 
 Version 0.7.1 (2020-01-20)
 ========================
@@ -32,7 +35,7 @@ Version 0.6.6.2 (2019-11-12)
 ========================
  * Add fingerprint (2019 Chinese Levin Hybrid)
  * Make DBC preprocessing deterministic
- * Make visiond compile on pc 
+ * Make visiond compile on pc
 
 Version 0.6.6.1 (2019-11-08)
 ========================

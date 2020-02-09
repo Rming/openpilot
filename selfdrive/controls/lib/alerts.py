@@ -153,18 +153,11 @@ ALERTS = [
       Priority.HIGH, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, .1, .1),
 
   Alert(
-      "driverMonitorOff",
-      "驾驶员检测暂时不可用",
-      "准确率较低",
+      "driverMonitorLowAcc",
+      "没有检测到驾驶员",
+      "驾驶员监控模型输出不明确",
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOW, VisualAlert.none, AudibleAlert.none, .4, 0., 4.),
-
-  Alert(
-      "driverMonitorOn",
-      "驾驶员检测可用",
-      "准确率较高",
-      AlertStatus.normal, AlertSize.mid,
-      Priority.LOW, VisualAlert.none, AudibleAlert.none, .4, 0., 4.),
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .4, 0., 1.),
 
   Alert(
       "geofence",
@@ -178,6 +171,13 @@ ALERTS = [
       "准备好随时接管",
       "请手扶方向盘并时刻注意路况",
       AlertStatus.normal, AlertSize.mid,
+      Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
+
+  Alert(
+      "startupMaster",
+      "警告: 该分支未经测试",
+      "请手扶方向盘并时刻注意路况",
+      AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
 
   Alert(
@@ -330,7 +330,7 @@ ALERTS = [
   Alert(
       "sensorDataInvalidNoEntry",
       "系统不可用",
-      "EON 传感器数据缺失",
+      "设备传感器数据缺失",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
@@ -366,7 +366,7 @@ ALERTS = [
   Alert(
       "calibrationInvalid",
       "立即接管",
-      "校准失败：请调整 EON 的位置后重新校准",
+      "校准失败：请调整设备的位置后重新校准",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
@@ -437,7 +437,7 @@ ALERTS = [
   Alert(
       "lowMemory",
       "立即接管",
-      "内存过低: 请重启 EON",
+      "内存过低: 请重启设备",
       AlertStatus.critical, AlertSize.full,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
@@ -538,7 +538,7 @@ ALERTS = [
   Alert(
       "calibrationInvalidNoEntry",
       "系统不可用",
-      "校准失败：请调整 EON 的位置后重新校准",
+      "校准失败：请调整设备的位置后重新校准",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
 
@@ -685,7 +685,7 @@ ALERTS = [
   Alert(
       "lowMemoryNoEntry",
       "系统不可用",
-      "内存过低: 请重启 EON",
+      "内存过低: 请重启设备",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
@@ -741,22 +741,22 @@ ALERTS = [
 
   Alert(
       "sensorDataInvalidPermanent",
-      "EON 传感器数据缺失",
-      "请重启 EON",
+      "设备传感器数据缺失",
+      "请重启设备",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "soundsUnavailablePermanent",
       "找不到音效装置",
-      "请重启 EON",
+      "请重启设备",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
       "lowMemoryPermanent",
       "内存严重不足",
-      "请重启 EON",
+      "请重启设备",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 

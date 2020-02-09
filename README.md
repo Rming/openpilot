@@ -66,9 +66,9 @@ Donation
 
 捐助款项将全部用于 openpilot 相关的 服务器费用、运营支持。
 
-| Wechat | 
+| Wechat |
 | :------: |
-| <a href="#donation"><img width="150" src="https://doc.sdut.me/files/zan.jpg"> </a>| 
+| <a href="#donation"><img width="150" src="https://doc.sdut.me/files/zan.jpg"> </a>|
 
 捐助名单（按时间顺序）：
 
@@ -81,6 +81,7 @@ Donation
 | 2020-01-20 | 小石头 | ￥106 |
 | 2020-01-20 | KT | ￥1 |
 | 2020-01-20 | cnlinux | ￥66 |
+| 2020-01-19 | 买买熊 | 乐视3 pro 1个<br>harness 1个<br>black panda 1个|
 | 2020-01-18 | Liu Sitong | ￥66.66 |
 | 2020-01-04 | 小伍 | ￥16 |
 | 2020-01-04 | TaTa | ￥16 |
