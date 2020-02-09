@@ -1,11 +1,11 @@
 Version 0.7.2 (2020-02-07)
 ========================
- * ECU firmware version based fingerprinting for Honda & Toyota
- * New driving model: improved path prediction during turns and lane changes and better lead speed tracking
- * Improve driver monitoring under extreme lighting and add low accuracy alert
- * Support for 2019 Rav4 Hybrid thanks to illumiN8i!
- * Support for 2016, 2017 and 2020 Lexus RX thanks to illumiN8i!
- * Support for 2020 Chrysler Pacifica Hybrid thanks to adhintz!
+ * 基于ECU固件版本的指纹识别（丰田、本田车型）
+ * 更新驾驶模型: 改善弯道和车道变换期间的路径预测并更好地追踪前车车速
+ * 改善极端光线条件下的驾驶员监控，添加无法准确监控的警告
+ * 支持丰田 Rav4 2019 混动（感谢 illumiN8i）
+ * 支持雷克萨斯 RX 2016, 2017, 2020（感谢 illumiN8i）
+ * 支持克莱斯勒 Pacifica 2020 混动（感谢 adhintz）
 
 Version 0.7.1 (2020-01-20)
 ========================
@@ -30,17 +30,6 @@ Version 0.7 (2019-12-13)
  * Refactor Panda code towards ISO26262 and SIL2 compliancy
  * Forward stock FCW for Honda Nidec
  * Volkswagen port now standard: comma Harness intercepts stock camera
-
-Version 0.6.6.2 (2019-11-12)
-========================
- * Add fingerprint (2019 Chinese Levin Hybrid)
- * Make DBC preprocessing deterministic
- * Make visiond compile on pc 
-
-Version 0.6.6.1 (2019-11-08)
-========================
- * Fix fan control when not plugged into panda
- * Fix unicode bug in DoUninstall reading
 
 Version 0.6.6 (2019-11-05)
 ========================
