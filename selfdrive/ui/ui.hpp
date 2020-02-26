@@ -233,6 +233,7 @@ typedef struct UIState {
   int longitudinal_control_timeout;
   int limit_set_speed_timeout;
   int afa_ui_volume_multiple_timeout;
+  int afa_ui_brightness_multiple_timeout;
 
   bool controls_seen;
 
@@ -241,6 +242,7 @@ typedef struct UIState {
   bool longitudinal_control;
   bool limit_set_speed;
   float afa_ui_volume_multiple;
+  float afa_ui_brightness_multiple;
   float speed_lim_off;
   bool is_ego_over_limit;
   char alert_type[64];
