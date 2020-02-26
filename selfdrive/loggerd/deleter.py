@@ -17,7 +17,7 @@ def deleter_thread(exit_event):
     available_bytes = get_available_bytes()
     if available_bytes is not None and available_bytes < (8 * 1024 * 1024 * 1024):
       # remove the earliest directory we can
-      dirs = listdir_by_creation(ROOT)
+      dirs = listdir_by_creation(ROOT) if os.path.isdir(ROOT) else []
       for delete_dir in dirs:
         delete_path = os.path.join(ROOT, delete_dir)
 
@@ -34,7 +34,7 @@ def deleter_thread(exit_event):
 
     # deleting dashcam
     if available_bytes is not None and available_bytes < (5 * 1024 * 1024 * 1024):
-      dirs = listdir_by_creation(DASHCAM_ROOT)
+      dirs = listdir_by_creation(DASHCAM_ROOT) if os.path.isdir(DASHCAM_ROOT) else []
       for delete_dir in dirs:
         delete_path = os.path.join(DASHCAM_ROOT, delete_dir)
         try:
