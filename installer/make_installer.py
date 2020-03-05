@@ -76,13 +76,14 @@ def updateInstallerMakefile():
             branches.append(branch['name'])
         for region in cdnData:
             url = cdnData[region]
+            urlEscape = url.replace("/", "\\/")
             for branch in branches:
                 branch = branch.lower()
                 fix = "%s_%s_%s" % (name, branch, region)
                 objsName = "OPENPILOT_OBJS_%s" % fix
                 ofileName = "installer_%s.o" % fix
                 objsStr = "%s = %s continue_openpilot.o $(COMMON_OBJS)" % (objsName, ofileName)
-                ofileStr = "%s: installer.c\n\t@echo \"[ CC ] $@\"\n\t$(CC) $(CFLAGS) -MMD -I.. -I../selfdrive -DBRAND=openpilot -DBRANCH=%s -DGITURL=%s -c -o '$@' '$<'" % (ofileName, branch, url)
+                ofileStr = "%s: installer.c\n\t@echo \"[ CC ] $@\"\n\t$(CC) $(CFLAGS) -MMD -I.. -I../selfdrive -DBRAND=openpilot -DBRANCH=%s -DGITURL='%s' -c -o '$@' '$<'" % (ofileName, branch, urlEscape)
                 targetStr = "installers/installer_%s: $(%s)\n\t@echo \"[ LINK ] $@\"\n\t$(CXX) -fPIC -o '$@' $^ -s $(FRAMEBUFFER_LIBS) -L/system/vendor/lib64 $(OPENGL_LIBS) -lm -llog" % (fix, objsName)
                 depsStr += "$(%s:.o=.d) " % objsName
                 makeAllStr += "installers/installer_%s " % fix
