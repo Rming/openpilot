@@ -140,8 +140,8 @@ static int do_install() {
   if(err == -1) return 1;
 
   // Disable SSH
-  err = system("setprop persist.neos.ssh 0");
-  if(err) return 1;
+  // err = system("setprop persist.neos.ssh 0");
+  // if(err) return 1;
 
   return 0;
 }
