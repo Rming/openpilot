@@ -57,3 +57,4 @@ panda_jungle
 htmlcov
 pandaextra
 
+installer/Makefile
