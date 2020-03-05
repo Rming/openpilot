@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # This Python file uses the following encoding: utf-8
 # -*- coding: utf-8 -*-
+import os
 import requests
 
+baseDir = os.path.split(os.path.realpath(__file__))[0]
 githubApiToken = 'a1bdeee22c60fcde021c92add2760b2b1cce1ea1'
 githubApiBase  = 'https://api.git.sdut.me'
 forks = {
@@ -88,10 +90,10 @@ def updateInstallerMakefile():
             # print name, region, url, branchUrl
     makeFileStr = "%s\n.PHONY: all\n%s\n" % (depsStr, makeAllStr) + makeFileStr
 
-    with open('MakefileTpl') as f:
+    with open(baseDir + '/MakefileTpl') as f:
         s = f.read()
         s = s.replace("{{MAKE_FILE_STR}}", makeFileStr)
-        with open("Makefile","w") as f:
+        with open(baseDir + "/Makefile","w") as f:
             f.write(s)
 
 
