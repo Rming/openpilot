@@ -58,3 +58,4 @@ htmlcov
 pandaextra
 
 installer/Makefile
+installer/installers/installer_*
