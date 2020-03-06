@@ -113,7 +113,8 @@ static int do_install() {
   }
 
   struct stat sb;
-  if (stat(PRE_CHECKOUT_FOLDER, &sb) == 0 && S_ISDIR(sb.st_mode)) {
+  // if (stat(PRE_CHECKOUT_FOLDER, &sb) == 0 && S_ISDIR(sb.st_mode)) {
+  if (false) {
     printf("Pre-checkout found\n");
     err = use_pre_checkout();
   } else {
