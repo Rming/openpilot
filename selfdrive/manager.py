@@ -512,6 +512,8 @@ def main():
 
   if params.get("AfaUiVolumeMultiple") is None:
     params.put("AfaUiVolumeMultiple", "0")
+  if params.get("AfaUiBrightnessMultiple") is None:
+    params.put("AfaUiBrightnessMultiple", "100")
   if params.get("AfaCameraOffset") is None:
     params.put("AfaCameraOffset", "6")
 

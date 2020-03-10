@@ -204,12 +204,14 @@ static void ui_init_vision(UIState *s, const VisionStreamBufs back_bufs,
   read_param_bool(&s->longitudinal_control, "LongitudinalControl");
   read_param_bool(&s->limit_set_speed, "LimitSetSpeed");
   read_param_float(&s->afa_ui_volume_multiple, "AfaUiVolumeMultiple");
+  read_param_float(&s->afa_ui_brightness_multiple, "AfaUiBrightnessMultiple");
 
   // Set offsets so params don't get read at the same time
   s->longitudinal_control_timeout = UI_FREQ / 3;
   s->is_metric_timeout = UI_FREQ / 2;
   s->limit_set_speed_timeout = UI_FREQ;
   s->afa_ui_volume_multiple_timeout = UI_FREQ / 3 * 4;
+  s->afa_ui_brightness_multiple_timeout = UI_FREQ / 3 * 5;
 }
 
 struct tm get_time_struct() {
@@ -914,8 +916,10 @@ int main(int argc, char* argv[]) {
     // light sensor is only exposed on EONs
     float clipped_brightness = (s->light_sensor*BRIGHTNESS_M) + BRIGHTNESS_B;
     if (clipped_brightness > 512) clipped_brightness = 512;
+    clipped_brightness = clipped_brightness * s->afa_ui_brightness_multiple /100;
     smooth_brightness = clipped_brightness * 0.01 + smooth_brightness * 0.99;
     if (smooth_brightness > 255) smooth_brightness = 255;
+    if (smooth_brightness < 1) smooth_brightness = 1;
     set_brightness(s, (int)smooth_brightness);
 
     if (!s->vision_connected) {
@@ -1024,6 +1028,7 @@ int main(int argc, char* argv[]) {
     read_param_float_timeout(&s->speed_lim_off, "SpeedLimitOffset", &s->limit_set_speed_timeout);
 
     read_param_float_timeout(&s->afa_ui_volume_multiple, "AfaUiVolumeMultiple", &s->afa_ui_volume_multiple_timeout);
+    read_param_float_timeout(&s->afa_ui_brightness_multiple, "AfaUiBrightnessMultiple", &s->afa_ui_brightness_multiple_timeout);
 
     pthread_mutex_unlock(&s->lock);
 
