@@ -183,7 +183,7 @@ static void ui_draw_sidebar_temp_metric(UIState *s, bool hasSidebar) {
   }
 
   snprintf(temp_value_str, sizeof(temp_value_str), "%d", s->scene.paTemp);
-  snprintf(temp_value_unit, sizeof(temp_value_unit), "%s", "°C");
+  snprintf(temp_value_unit, sizeof(temp_value_unit), "%s", "℃");
   snprintf(temp_label_str, sizeof(temp_label_str), "%s", "温度");
   strcat(temp_value_str, temp_value_unit);
 
