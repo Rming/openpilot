@@ -97,6 +97,19 @@ static void handle_vision_touch(UIState *s, int touch_x, int touch_y) {
   }
 }
 
+
+static bool handle_dashcam_button_touch(UIState *s, int touch_x, int touch_y) {
+  if (s->vision_connected && (s->active_app != cereal_UiLayoutState_App_settings)) {
+    if (touch_x >= 1660 && touch_x <= 1810) {
+      if (touch_y >= 885 && touch_y <= 1035) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+
 volatile sig_atomic_t do_exit = 0;
 static void set_do_exit(int sig) {
   do_exit = 1;
@@ -266,16 +279,6 @@ struct tm get_time_struct() {
   struct tm tm = *localtime(&t);
   return tm;
 }
-
-bool dashcam_button_clicked(int touch_x, int touch_y) {
-  if (touch_x >= 1660 && touch_x <= 1810) {
-    if (touch_y >= 885 && touch_y <= 1035) {
-      return true;
-    }
-  }
-  return false;
-}
-
 
 void toggle_dashcam_start() {
   const char *dashcam_root = "/data/media/0/dashcam/";
@@ -1002,6 +1005,9 @@ int main(int argc, char* argv[]) {
       set_awake(s, true);
       handle_sidebar_touch(s, touch_x, touch_y);
       handle_vision_touch(s, touch_x, touch_y);
+      if (handle_dashcam_button_touch(s, touch_x, touch_y)) {
+        toggle_dashcam(s);
+      }
     }
 
     if (!s->vision_connected) {
@@ -1043,16 +1049,6 @@ int main(int argc, char* argv[]) {
 
     // Don't waste resources on drawing in case screen is off
     if (s->awake) {
-      //afa feature
-      //dashcam button clicked
-      if (s->status != STATUS_STOPPED) {
-        int touch_x = -1, touch_y = -1;
-        int touched = touch_poll(&touch, &touch_x, &touch_y, s->awake ? 0 : 100);
-        if (dashcam_button_clicked(touch_x, touch_y)) {
-          toggle_dashcam(s);
-        }
-      }
-
       ui_draw(s);
       glFinish();
       should_swap = true;
