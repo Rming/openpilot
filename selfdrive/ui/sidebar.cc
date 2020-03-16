@@ -123,19 +123,19 @@ static void ui_draw_sidebar_metric(UIState *s, const char* label_str, const char
   if (!message_str) {
     nvgFillColor(s->vg, COLOR_WHITE);
     nvgFontSize(s->vg, 78);
-    nvgFontFace(s->vg, "sans-bold");
+    nvgFontFace(s->vg, "miui-bold");
     nvgTextAlign(s->vg, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
     nvgTextBox(s->vg, metric_x + 50, metric_y + 50, metric_w - 60, value_str, NULL);
 
     nvgFillColor(s->vg, COLOR_WHITE);
     nvgFontSize(s->vg, 48);
-    nvgFontFace(s->vg, "sans-regular");
+    nvgFontFace(s->vg, "miui-bold");
     nvgTextAlign(s->vg, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
     nvgTextBox(s->vg, metric_x + 50, metric_y + 50 + 66, metric_w - 60, label_str, NULL);
   } else {
     nvgFillColor(s->vg, COLOR_WHITE);
     nvgFontSize(s->vg, 48);
-    nvgFontFace(s->vg, "sans-bold");
+    nvgFontFace(s->vg, "miui-bold");
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     nvgTextBox(s->vg, metric_x + 35, metric_y + (strlen(message_str) > 8 ? 40 : 50), metric_w - 50, message_str, NULL);
   }
@@ -159,7 +159,7 @@ static void ui_draw_sidebar_storage_metric(UIState *s, bool hasSidebar) {
 
   snprintf(storage_value_str, sizeof(storage_value_str), "%d", (int)storage_pct);
   snprintf(storage_value_unit, sizeof(storage_value_unit), "%s", "%");
-  snprintf(storage_label_str, sizeof(storage_label_str), "%s", "STORAGE");
+  snprintf(storage_label_str, sizeof(storage_label_str), "%s", "使用空间");
   strcat(storage_value_str, storage_value_unit);
 
   ui_draw_sidebar_metric(s, storage_label_str, storage_value_str, storage_severity, storage_y_offset, NULL, hasSidebar);
@@ -184,7 +184,7 @@ static void ui_draw_sidebar_temp_metric(UIState *s, bool hasSidebar) {
 
   snprintf(temp_value_str, sizeof(temp_value_str), "%d", s->scene.paTemp);
   snprintf(temp_value_unit, sizeof(temp_value_unit), "%s", "°C");
-  snprintf(temp_label_str, sizeof(temp_label_str), "%s", "TEMP");
+  snprintf(temp_label_str, sizeof(temp_label_str), "%s", "温度");
   strcat(temp_value_str, temp_value_unit);
 
   ui_draw_sidebar_metric(s, temp_label_str, temp_value_str, temp_severity, temp_y_offset, NULL, hasSidebar);
@@ -197,23 +197,23 @@ static void ui_draw_sidebar_panda_metric(UIState *s, bool hasSidebar) {
 
   if (s->scene.hwType == cereal_HealthData_HwType_unknown) {
     panda_severity = 2;
-    snprintf(panda_message_str, sizeof(panda_message_str), "%s", "NO PANDA");
+    snprintf(panda_message_str, sizeof(panda_message_str), "%s", "PANDA\n未连接");
   } else if (s->scene.hwType == cereal_HealthData_HwType_whitePanda) {
     panda_severity = 0;
-    snprintf(panda_message_str, sizeof(panda_message_str), "%s", "PANDA ACTIVE");
+    snprintf(panda_message_str, sizeof(panda_message_str), "%s", "PANDA\n已连接");
   } else if (
       (s->scene.hwType == cereal_HealthData_HwType_greyPanda) ||
       (s->scene.hwType == cereal_HealthData_HwType_blackPanda) ||
       (s->scene.hwType == cereal_HealthData_HwType_uno)) {
       if (s->scene.satelliteCount == -1) {
         panda_severity = 0;
-        snprintf(panda_message_str, sizeof(panda_message_str), "%s", "PANDA ACTIVE");
+        snprintf(panda_message_str, sizeof(panda_message_str), "%s", "PANDA\n已连接");
       } else if (s->scene.satelliteCount < 6) {
         panda_severity = 1;
-        snprintf(panda_message_str, sizeof(panda_message_str), "%s", "PANDA\nNO GPS");
+        snprintf(panda_message_str, sizeof(panda_message_str), "%s%d", "PANDA\nGPS: ", s->scene.satelliteCount);
       } else if (s->scene.satelliteCount >= 6) {
         panda_severity = 0;
-        snprintf(panda_message_str, sizeof(panda_message_str), "%s", "PANDA GOOD GPS");
+        snprintf(panda_message_str, sizeof(panda_message_str), "%s%d", "PANDA\nGPS: ", s->scene.satelliteCount);
       }
   }
 
