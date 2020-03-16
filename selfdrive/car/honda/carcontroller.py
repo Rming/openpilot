@@ -2,7 +2,7 @@ from collections import namedtuple
 from cereal import car
 from common.realtime import DT_CTRL
 from selfdrive.controls.lib.drive_helpers import rate_limit
-from common.numpy_fast import clip
+from common.numpy_fast import clip, interp
 from selfdrive.car import create_gas_command
 from selfdrive.car.honda import hondacan
 from selfdrive.car.honda.values import CruiseButtons, CAR, VISUAL_HUD
@@ -30,7 +30,7 @@ def actuator_hystereses(brake, braking, brake_steady, v_ego, car_fingerprint):
     brake_steady = brake + brake_hyst_gap
   brake = brake_steady
 
-  if (car_fingerprint in (CAR.ACURA_ILX, CAR.CRV)) and brake > 0.0:
+  if (car_fingerprint in (CAR.ACURA_ILX, CAR.CRV, CAR.CRV_EU)) and brake > 0.0:
     brake += 0.15
 
   return brake, braking, brake_steady
@@ -41,7 +41,7 @@ def brake_pump_hysteresis(apply_brake, apply_brake_last, last_pump_on_state, ts)
   if (apply_brake > apply_brake_last):
     pump_on = True
 
-  # if calling for the same brake, leave the pump alone. It was either turned on 
+  # if calling for the same brake, leave the pump alone. It was either turned on
   # previously while braking, or it was turned off previously when apply_brake
   # dropped below the last value. In either case, leave it as-is.
   # Necessary because when OP is lifting its foot off the brake, we'll come in here
@@ -75,12 +75,21 @@ def process_hud_alert(hud_alert):
 
 
 HUDData = namedtuple("HUDData",
-                     ["pcm_accel", "v_cruise",  "car", 
+                     ["pcm_accel", "v_cruise",  "car",
                       "lanes", "beep", "chime", "fcw", "acc_alert", "steer_required", "dist_lines", "dashed_lanes"])
 
+class CarControllerParams():
+  def __init__(self, CP):
+      self.BRAKE_MAX = 1024//4
+      self.STEER_MAX = CP.lateralParams.torqueBP[-1]
+      # mirror of list (assuming first item is zero) for interp of signed request values
+      assert(CP.lateralParams.torqueBP[0] == 0)
+      assert(CP.lateralParams.torqueBP[0] == 0)
+      self.STEER_LOOKUP_BP = [v * -1 for v in CP.lateralParams.torqueBP][1:][::-1] + list(CP.lateralParams.torqueBP)
+      self.STEER_LOOKUP_V = [v * -1 for v in CP.lateralParams.torqueV][1:][::-1] + list(CP.lateralParams.torqueV)
 
 class CarController():
-  def __init__(self, dbc_name, CP):
+  def __init__(self, dbc_name, CP, VM):
     self.braking = False
     self.brake_steady = 0.
     self.brake_last = 0.
@@ -88,17 +97,16 @@ class CarController():
     self.last_pump_on_state = False
     self.packer = CANPacker(dbc_name)
     self.new_radar_config = False
+
+    self.params = CarControllerParams(CP)
+
+    # afa feature
     self.prev_lead_distance = 0.0
     self.stopped_lead_distance = 0.0
     self.lead_distance_counter = 1
     self.lead_distance_counter_prev = 1
     self.rough_lead_speed = 0.0
-    #eps_modified
-    self.eps_modified = False
-    for fw in CP.carFw:
-      if fw.ecu == "eps" and b"," in fw.fwVersion:
-        print("EPS FW MODIFIED!")
-        self.eps_modified = True
+
 
   def rough_speed(self, lead_distance):
     if self.prev_lead_distance != lead_distance:
@@ -116,11 +124,13 @@ class CarController():
              hud_v_cruise, hud_show_lanes, hud_show_car, \
              hud_alert, snd_beep, snd_chime):
 
+    P = self.params
+
     # *** apply brake hysteresis ***
-    brake, self.braking, self.brake_steady = actuator_hystereses(actuators.brake, self.braking, self.brake_steady, CS.v_ego, CS.CP.carFingerprint)
+    brake, self.braking, self.brake_steady = actuator_hystereses(actuators.brake, self.braking, self.brake_steady, CS.out.vEgo, CS.CP.carFingerprint)
 
     # *** no output if not enabled ***
-    if not enabled and CS.pcm_acc_status:
+    if not enabled and CS.out.cruiseState.enabled:
       # send pcm acc cancel cmd if drive is disabled but pcm is still on, or if the system can't be activated
       pcm_cancel_cmd = True
 
@@ -152,29 +162,10 @@ class CarController():
 
     # **** process the car messages ****
 
-    # *** compute control surfaces ***
-    BRAKE_MAX = 1024//4
-    if CS.CP.carFingerprint in (CAR.ACURA_ILX):
-      STEER_MAX = 0xF00
-    elif CS.CP.carFingerprint in (CAR.CRV, CAR.ACURA_RDX):
-      STEER_MAX = 0x3e8  # CR-V only uses 12-bits and requires a lower value
-    elif CS.CP.carFingerprint in (CAR.ODYSSEY_CHN):
-      STEER_MAX = 0x7FFF
-    elif CS.CP.carFingerprint in (CAR.CIVIC) and self.eps_modified:
-      STEER_MAX = 0x1400
-    else:
-      STEER_MAX = 0x1000
-
     # steer torque is converted back to CAN reference (positive when steering right)
     apply_gas = clip(actuators.gas, 0., 1.)
-    apply_brake = int(clip(self.brake_last * BRAKE_MAX, 0, BRAKE_MAX - 1))
-    apply_steer = int(clip(-actuators.steer * STEER_MAX, -STEER_MAX, STEER_MAX))
-
-    if CS.CP.carFingerprint in (CAR.CIVIC) and self.eps_modified:
-      if apply_steer > 0xA00:
-        apply_steer = (apply_steer - 0xA00) / 2 + 0xA00
-      elif apply_steer < -0xA00:
-        apply_steer = (apply_steer + 0xA00) / 2 - 0xA00
+    apply_brake = int(clip(self.brake_last * P.BRAKE_MAX, 0, P.BRAKE_MAX - 1))
+    apply_steer = int(interp(-actuators.steer * P.STEER_MAX, P.STEER_LOOKUP_BP, P.STEER_LOOKUP_V))
 
     lkas_active = enabled and not CS.steer_not_allowed and CS.lkMode
 
@@ -195,7 +186,8 @@ class CarController():
       # If using stock ACC, spam cancel command to kill gas when OP disengages.
       if pcm_cancel_cmd:
         can_sends.append(hondacan.spam_buttons_command(self.packer, CruiseButtons.CANCEL, idx, CS.CP.carFingerprint, CS.CP.isPandaBlack))
-      elif CS.stopped:
+
+      elif CS.out.cruiseState.standstill:
         if CS.CP.carFingerprint in (CAR.ACCORD, CAR.ACCORD_15, CAR.ACCORDH):
           rough_lead_speed = self.rough_speed(CS.lead_distance)
           if CS.lead_distance > (self.stopped_lead_distance + 15.0) or rough_lead_speed > 0.1:
@@ -211,6 +203,7 @@ class CarController():
       else:
         self.stopped_lead_distance = CS.lead_distance
         self.prev_lead_distance = CS.lead_distance
+
 
     else:
       # Send gas and brake commands.
