@@ -141,8 +141,8 @@ struct CarState {
   rightBlinker @21 :Bool;
   genericToggle @23 :Bool;
   # afa fork's field
-  readdistancelines @32 :Float32;
-  lkMode @33 :Bool;
+  readdistancelines @35 :Float32;
+  lkMode @36 :Bool;
 
 
   # lock info
@@ -155,7 +155,7 @@ struct CarState {
 
   # which packets this state came from
   canMonoTimes @12: List(UInt64);
-  
+
   # blindspot sensors
   leftBlindspot @33 :Bool; # Is there something blocking the left lane change
   rightBlindspot @34 :Bool; # Is there something blocking the right lane change
