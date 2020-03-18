@@ -110,6 +110,7 @@ keys = {
   "AfaUiVolumeMultiple": [TxType.PERSISTENT],
   "AfaUiBrightnessMultiple": [TxType.PERSISTENT],
   "AfaCameraOffset": [TxType.PERSISTENT],
+  "AfaCarModel": [TxType.PERSISTENT],
 }
 
 

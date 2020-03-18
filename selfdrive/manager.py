@@ -521,19 +521,17 @@ def main():
     ("LastUpdateTime", datetime.datetime.now().isoformat().encode('utf8')),
     ("OpenpilotEnabledToggle", "1"),
     ("LaneChangeEnabled", "1"),
+    # afa feature
+    ("AfaUiVolumeMultiple", "0"),
+    ("AfaUiBrightnessMultiple", "100"),
+    ("AfaCameraOffset", "6"),
+    ("AfaCarModel", ""),
   ]
 
   # set unset params
   for k, v in default_params:
     if params.get(k) is None:
       params.put(k, v)
-
-  if params.get("AfaUiVolumeMultiple") is None:
-    params.put("AfaUiVolumeMultiple", "0")
-  if params.get("AfaUiBrightnessMultiple") is None:
-    params.put("AfaUiBrightnessMultiple", "100")
-  if params.get("AfaCameraOffset") is None:
-    params.put("AfaCameraOffset", "6")
 
   # is this chffrplus?
   if os.getenv("PASSIVE") is not None:
