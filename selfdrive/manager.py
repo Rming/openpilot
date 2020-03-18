@@ -525,6 +525,7 @@ def main():
     ("AfaUiVolumeMultiple", "0"),
     ("AfaUiBrightnessMultiple", "100"),
     ("AfaCameraOffset", "6"),
+    ("AfaBattPercOff", "0"),
     ("AfaCarModel", ""),
   ]
 

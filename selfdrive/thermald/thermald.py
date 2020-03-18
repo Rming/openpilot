@@ -194,6 +194,9 @@ def thermald_thread():
   params = Params()
   pm = PowerMonitoring()
 
+  afa_batt_perc_off = int(params.get("AfaBattPercOff", encoding='utf8'))
+  BATT_PERC_OFF = afa_batt_perc_off or BATT_PERC_OFF
+
   while 1:
     health = messaging.recv_sock(health_sock, wait=True)
     location = messaging.recv_sock(location_sock)

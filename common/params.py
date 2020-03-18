@@ -111,6 +111,7 @@ keys = {
   "AfaUiBrightnessMultiple": [TxType.PERSISTENT],
   "AfaCameraOffset": [TxType.PERSISTENT],
   "AfaCarModel": [TxType.PERSISTENT],
+  "AfaBattPercOff": [TxType.PERSISTENT],
 }
 
 
