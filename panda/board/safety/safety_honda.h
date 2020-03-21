@@ -226,7 +226,7 @@ static int honda_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
   // GAS: safety check
   if (addr == 0x200) {
     if (!current_controls_allowed) {
-      if (!honda_allow_gas_press && (GET_BYTE(to_send, 0) || GET_BYTE(to_send, 1))) {
+      if (GET_BYTE(to_send, 0) || GET_BYTE(to_send, 1)) {
         tx = 0;
       }
     }
@@ -274,7 +274,6 @@ static int honda_nidec_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
   // fwd from car to camera. also fwd certain msgs from camera to car
   // 0xE4 is steering on all cars except CRV and RDX, 0x194 for CRV and RDX,
   // 0x1FA is brake control, 0x30C is acc hud, 0x33D is lkas hud,
-  // 0x39f is radar hud
   int bus_fwd = -1;
 
   if (!relay_malfunction) {
