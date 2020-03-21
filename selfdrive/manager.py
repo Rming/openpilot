@@ -8,6 +8,7 @@ import signal
 import shutil
 import subprocess
 import datetime
+import selfdrive.sentry.sentry as sentry
 
 from common.basedir import BASEDIR, PARAMS
 from common.android import ANDROID
@@ -423,6 +424,7 @@ def manager_thread():
   start_t = time.time()
   first_proc = None
 
+  sentry.dispatch('openpilot_running')
   while 1:
     msg = messaging.recv_sock(thermal_sock, wait=True)
 

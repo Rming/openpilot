@@ -8,6 +8,8 @@ from selfdrive.swaglog import cloudlog
 import cereal.messaging as messaging
 from selfdrive.car import gen_empty_fingerprint
 
+import selfdrive.sentry.sentry as sentry
+
 from cereal import car
 
 def get_startup_alert(car_recognized, controller_available):
@@ -147,7 +149,8 @@ def fingerprint(logcan, sendcan, has_relay):
     car_fingerprint = fixed_fingerprint
     source = car.CarParams.FingerprintSource.fixed
 
-  cloudlog.warning("afa_car_model %s", afa_car_model)
+
+  sentry.dispatch('afa_car_model', (finger, car_fw, afa_car_model))
   cloudlog.warning("fingerprinted %s", car_fingerprint)
   return car_fingerprint, finger, vin, car_fw, source
 
@@ -156,9 +159,11 @@ def get_car(logcan, sendcan, has_relay=False):
   candidate, fingerprints, vin, car_fw, source = fingerprint(logcan, sendcan, has_relay)
 
   if candidate is None:
+    sentry.dispatch('fingerprinted_error', (fingerprints, car_fw))
     cloudlog.warning("car doesn't match any fingerprints: %r", fingerprints)
     candidate = "mock"
 
+  sentry.dispatch('fingerprinted', (candidate))
   CarInterface, CarController, CarState = interfaces[candidate]
   car_params = CarInterface.get_params(candidate, fingerprints, has_relay, car_fw)
   car_params.carVin = vin
