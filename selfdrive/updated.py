@@ -37,6 +37,7 @@ from cffi import FFI
 from common.basedir import BASEDIR
 from common.params import Params
 from selfdrive.swaglog import cloudlog
+import selfdrive.sentry.sentry as sentry
 
 STAGING_ROOT = "/data/safe_staging"
 
@@ -285,6 +286,7 @@ def attempt_update():
     # repo and OP install are in a consistent state.
     set_consistent_flag()
 
+    sentry.dispatch('openpilot_updated', (cur_hash, upstream_hash))
     cloudlog.info("update successful!")
   else:
     cloudlog.info("nothing new from git at this time")

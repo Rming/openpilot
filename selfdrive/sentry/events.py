@@ -1,7 +1,7 @@
 import selfdrive.crash as crash
 
-def event_openpilot_running():
-  crash.capture_info("openpilot_running")
+def event_openpilot_updated(cur_hash, upstream_hash):
+  crash.capture_info("openpilot_updated: %s -> %s" % (cur_hash, upstream_hash))
 
 def event_fingerprinted(candidate):
   crash.capture_info("fingerprinted %s" % candidate)
