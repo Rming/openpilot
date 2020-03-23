@@ -112,6 +112,8 @@ keys = {
   "AfaCameraOffset": [TxType.PERSISTENT],
   "AfaCarModel": [TxType.PERSISTENT],
   "AfaBattPercOff": [TxType.PERSISTENT],
+  "AfaChargeBatPercentMin": [TxType.PERSISTENT],
+  "AfaChargeBatPercentMax": [TxType.PERSISTENT],
 }
 
 

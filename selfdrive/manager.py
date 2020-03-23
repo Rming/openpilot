@@ -527,6 +527,8 @@ def main():
     ("AfaCameraOffset", "6"),
     ("AfaBattPercOff", "10"),
     ("AfaCarModel", ""),
+    ("AfaChargeBatPercentMin", "60"),
+    ("AfaChargeBatPercentMax", "80"),
   ]
 
   # set unset params

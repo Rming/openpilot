@@ -19,6 +19,9 @@ from selfdrive.loggerd.config import get_available_percent
 from selfdrive.pandad import get_expected_signature
 from selfdrive.thermald.power_monitoring import PowerMonitoring, get_battery_capacity, get_battery_status, get_battery_current, get_battery_voltage, get_usb_present, set_battery_charging
 
+params = Params()
+
+
 FW_SIGNATURE = get_expected_signature()
 
 ThermalStatus = log.ThermalData.ThermalStatus
@@ -29,8 +32,8 @@ DAYS_NO_CONNECTIVITY_MAX = 9999  # do not allow to engage after a week without i
 DAYS_NO_CONNECTIVITY_PROMPT = 9999  # send an offroad prompt after 4 days with no internet
 
 # battery charge control
-CHARGE_BAT_PERCENT_MAX = 80
-CHARGE_BAT_PERCENT_MIN = 60
+CHARGE_BAT_PERCENT_MAX = int(params.get("AfaChargeBatPercentMax", encoding='utf8'))
+CHARGE_BAT_PERCENT_MIN = int(params.get("AfaChargeBatPercentMin", encoding='utf8'))
 
 LEON = False
 last_eon_fan_val = None
@@ -191,7 +194,6 @@ def thermald_thread():
     setup_eon_fan()
     handle_fan = handle_fan_eon
 
-  params = Params()
   pm = PowerMonitoring()
 
   afa_batt_perc_off = int(params.get("AfaBattPercOff", encoding='utf8'))
