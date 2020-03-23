@@ -381,10 +381,11 @@ def thermald_thread():
     # battery low
     if usb_power and not charging_on and msg.thermal.batteryPercent < CHARGE_BAT_PERCENT_MIN:
       charging_on = True
+      set_battery_charging(charging_on)
     # battery high
     if usb_power and charging_on and msg.thermal.batteryPercent > CHARGE_BAT_PERCENT_MAX:
       charging_on = False
-    set_battery_charging(charging_on)
+      set_battery_charging(charging_on)
 
     # Offroad power monitoring
     pm.calculate(health, charging_on)
