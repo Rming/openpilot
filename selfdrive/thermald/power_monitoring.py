@@ -65,7 +65,7 @@ class PowerMonitoring:
     self.integration_lock = threading.Lock()
 
   # Calculation tick
-  def calculate(self, health, charging_on):
+  def calculate(self, health):
     try:
       now = time.time()
 
@@ -101,7 +101,7 @@ class PowerMonitoring:
         FUDGE_FACTOR = 1.33
 
         # Turn off charging for about 10 sec in a thread that does not get killed on SIGINT, and perform measurement here to avoid blocking thermal
-        def perform_pulse_measurement(now, charging_on):
+        def perform_pulse_measurement(now):
           try:
             set_battery_charging(False)
             time.sleep(5)
@@ -117,12 +117,12 @@ class PowerMonitoring:
             self._perform_integration(now, current_power * FUDGE_FACTOR)
 
             # Enable charging again
-            set_battery_charging(charging_on)
+            set_battery_charging(True)
           except Exception:
             cloudlog.exception("Pulsed power measurement failed")
 
         # Start pulsed measurement and return
-        threading.Thread(target=perform_pulse_measurement, args=(now, charging_on, )).start()
+        threading.Thread(target=perform_pulse_measurement, args=(now,)).start()
         self.next_pulsed_measurement_time = None
         return
 

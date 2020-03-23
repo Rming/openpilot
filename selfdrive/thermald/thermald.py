@@ -388,7 +388,7 @@ def thermald_thread():
       set_battery_charging(charging_on)
 
     # Offroad power monitoring
-    pm.calculate(health, charging_on)
+    pm.calculate(health)
     msg.thermal.offroadPowerUsage = pm.get_power_used()
 
     msg.thermal.chargingError = current_filter.x > 0. and msg.thermal.batteryPercent < 90  # if current is positive, then battery is being discharged
