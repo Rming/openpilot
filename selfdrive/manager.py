@@ -531,6 +531,8 @@ def main():
     ("AfaChargeBatPercentMax", "80"),
     ("AfaNoBatMode", "0"),
     ("AfaAllowGas", "1"),
+    ("AfaQiniuAK", ""),
+    ("AfaQiniuSK", ""),
   ]
 
   # set unset params

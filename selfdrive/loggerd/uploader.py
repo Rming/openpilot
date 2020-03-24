@@ -13,12 +13,14 @@ import subprocess
 
 from selfdrive.swaglog import cloudlog
 from selfdrive.loggerd.config import ROOT
+from selfdrive.loggerd.uploaders.qiniu_uploader import QiniuUploader
 
 from common import android
 from common.params import Params
 from common.api import Api
 
 fake_upload = os.getenv("FAKEUPLOAD") is not None
+custom_upload = os.getenv("CUSTOMUPLOAD") is not None
 
 def raise_on_thread(t, exctype):
   for ctid, tobj in threading._active.items():
@@ -103,6 +105,13 @@ class Uploader():
     self.immediate_priority = {"qlog.bz2": 0, "qcamera.ts": 1}
     self.high_priority = {"rlog.bz2": 0, "fcamera.hevc": 1, "dcamera.hevc": 2}
 
+    self.worker = None
+    if custom_upload:
+      params = Params()
+      qiniuAK = params.get("AfaQiniuAK").decode('utf8')
+      qiniuSK = params.get("AfaQiniuSK").decode('utf8')
+      self.worker = QiniuUploader(qiniuAK, qiniuSK)
+
   def clean_dirs(self):
     try:
       for logname in os.listdir(self.root):
@@ -172,6 +181,8 @@ class Uploader():
           def __init__(self):
             self.status_code = 200
         self.last_resp = FakeResponse()
+      elif custom_upload:
+        self.last_resp = self.worker.put(key, fn)
       else:
         with open(fn, "rb") as f:
           self.last_resp = requests.put(url, data=f, headers=headers, timeout=10)
