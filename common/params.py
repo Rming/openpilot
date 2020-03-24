@@ -114,6 +114,7 @@ keys = {
   "AfaBattPercOff": [TxType.PERSISTENT],
   "AfaChargeBatPercentMin": [TxType.PERSISTENT],
   "AfaChargeBatPercentMax": [TxType.PERSISTENT],
+  "AfaNoBatMode": [TxType.PERSISTENT],
 }
 
 

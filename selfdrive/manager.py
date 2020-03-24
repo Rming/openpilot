@@ -529,6 +529,7 @@ def main():
     ("AfaCarModel", ""),
     ("AfaChargeBatPercentMin", "60"),
     ("AfaChargeBatPercentMax", "80"),
+    ("AfaNoBatMode", "0"),
   ]
 
   # set unset params

@@ -21,7 +21,6 @@ from selfdrive.thermald.power_monitoring import PowerMonitoring, get_battery_cap
 
 params = Params()
 
-
 FW_SIGNATURE = get_expected_signature()
 
 ThermalStatus = log.ThermalData.ThermalStatus
@@ -30,10 +29,6 @@ NetworkStrength = log.ThermalData.NetworkStrength
 CURRENT_TAU = 15.   # 15s time constant
 DAYS_NO_CONNECTIVITY_MAX = 9999  # do not allow to engage after a week without internet
 DAYS_NO_CONNECTIVITY_PROMPT = 9999  # send an offroad prompt after 4 days with no internet
-
-# battery charge control
-CHARGE_BAT_PERCENT_MAX = int(params.get("AfaChargeBatPercentMax", encoding='utf8'))
-CHARGE_BAT_PERCENT_MIN = int(params.get("AfaChargeBatPercentMin", encoding='utf8'))
 
 LEON = False
 last_eon_fan_val = None
@@ -56,6 +51,11 @@ def read_tz(x, clip=True):
 
   return ret
 
+# battery charge control
+is_uno = (read_tz(29, clip=False) < -1000)
+is_no_bat_mode = params.get("AfaNoBatMode", encoding='utf8') == "1"
+CHARGE_BAT_PERCENT_MAX = 100 if is_uno or is_no_bat_mode else int(params.get("AfaChargeBatPercentMax", encoding='utf8'))
+CHARGE_BAT_PERCENT_MIN = 0 if is_uno or is_no_bat_mode else int(params.get("AfaChargeBatPercentMin", encoding='utf8'))
 
 def read_thermal():
   dat = messaging.new_message('thermal')
@@ -65,7 +65,7 @@ def read_thermal():
   dat.thermal.cpu3 = read_tz(12)
   dat.thermal.mem = read_tz(2)
   dat.thermal.gpu = read_tz(16)
-  dat.thermal.bat = read_tz(29)
+  dat.thermal.bat = 0 if is_no_bat_mode else read_tz(29)
   dat.thermal.pa0 = read_tz(25)
   return dat
 
@@ -187,7 +187,6 @@ def thermald_thread():
   usb_online_prev = False
   charging_on = True
 
-  is_uno = (read_tz(29, clip=False) < -1000)
   if is_uno or not ANDROID:
     handle_fan = handle_fan_uno
   else:
@@ -233,7 +232,7 @@ def thermald_thread():
     msg.thermal.usbOnline = get_usb_present()
 
     # Fake battery levels on uno for frame
-    if is_uno:
+    if is_uno or is_no_bat_mode:
       msg.thermal.batteryPercent = 100
       msg.thermal.batteryStatus = "Charging"
 
