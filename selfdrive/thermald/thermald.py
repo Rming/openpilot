@@ -193,7 +193,7 @@ def thermald_thread():
     setup_eon_fan()
     handle_fan = handle_fan_eon
 
-  pm = PowerMonitoring()
+  pm = PowerMonitoring(is_uno)
 
   afa_batt_perc_off = int(params.get("AfaBattPercOff", encoding='utf8'))
   BATT_PERC_OFF = afa_batt_perc_off or BATT_PERC_OFF
