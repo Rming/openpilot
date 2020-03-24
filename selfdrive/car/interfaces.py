@@ -3,6 +3,7 @@ import time
 from cereal import car
 from common.kalman.simple_kalman import KF1D
 from common.realtime import DT_CTRL
+from common.params import Params
 from selfdrive.car import gen_empty_fingerprint
 from selfdrive.controls.lib.drive_helpers import EventTypes as ET, create_event
 from selfdrive.controls.lib.vehicle_model import VehicleModel
@@ -31,7 +32,8 @@ class CarInterfaceBase():
       self.CC = CarController(self.cp.dbc_name, CP, self.VM)
 
     # afa feature
-    self.allowGasPress = False
+    params = Params()
+    self.allowGasPress =  True if params.get("AfaAllowGas", encoding='utf8') == "1" else False
 
   @staticmethod
   def calc_accel_override(a_ego, a_target, v_ego, v_target):
