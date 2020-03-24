@@ -188,8 +188,6 @@ typedef struct UIState {
   int font_sans_regular;
   int font_sans_semibold;
   int font_sans_bold;
-  int font_miui_regular;
-  int font_miui_bold;
   int img_wheel;
   int img_turn;
   int img_face;
