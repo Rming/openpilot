@@ -36,25 +36,20 @@ function launch {
     else
       if [ -f "${STAGING_ROOT}/finalized/.overlay_consistent" ]; then
         if [ ! -d /data/safe_staging/old_openpilot ]; then
-          ${BASEDIR}/installer/updated_confirm/updated_confirm
-          if [ $? -eq 0 ]; then
-            echo "Valid overlay update found, installing"
-            LAUNCHER_LOCATION="${BASH_SOURCE[0]}"
+          echo "Valid overlay update found, installing"
+          LAUNCHER_LOCATION="${BASH_SOURCE[0]}"
 
-            mv $BASEDIR /data/safe_staging/old_openpilot
-            mv "${STAGING_ROOT}/finalized" $BASEDIR
+          mv $BASEDIR /data/safe_staging/old_openpilot
+          mv "${STAGING_ROOT}/finalized" $BASEDIR
 
-            # The mv changed our working directory to /data/safe_staging/old_openpilot
-            cd "${BASEDIR}"
+          # The mv changed our working directory to /data/safe_staging/old_openpilot
+          cd "${BASEDIR}"
 
-            echo "Restarting launch script ${LAUNCHER_LOCATION}"
-            exec "${LAUNCHER_LOCATION}"
-          else
-            echo "skip update"
-          fi
+          echo "Restarting launch script ${LAUNCHER_LOCATION}"
+          exec "${LAUNCHER_LOCATION}"
         else
-            echo "openpilot backup found, not updating"
-            # TODO: restore backup? This means the updater didn't start after swapping
+          echo "openpilot backup found, not updating"
+          # TODO: restore backup? This means the updater didn't start after swapping
         fi
       fi
     fi
