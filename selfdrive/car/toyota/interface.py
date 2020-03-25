@@ -8,10 +8,6 @@ from selfdrive.swaglog import cloudlog
 from selfdrive.car.interfaces import CarInterfaceBase
 
 class CarInterface(CarInterfaceBase):
-  # afa feature
-  def __init__(self, CP, CarController, CarState):
-    super().__init__(CP, CarController, CarState)
-    self.allowGasPress = True
 
   @staticmethod
   def compute_gb(accel, speed):

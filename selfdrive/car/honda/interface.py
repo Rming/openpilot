@@ -81,9 +81,6 @@ class CarInterface(CarInterfaceBase):
     else:
       self.compute_gb = compute_gb_honda
 
-    # afa feature
-    self.allowGasPress = True
-
   @staticmethod
   def calc_accel_override(a_ego, a_target, v_ego, v_target):
 
