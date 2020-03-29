@@ -15,6 +15,8 @@ A_ACC_MAX = max(_A_CRUISE_MAX_V_FOLLOWING)
 
 ButtonType = car.CarState.ButtonEvent.Type
 
+GearShifter = car.CarState.GearShifter
+
 def compute_gb_honda(accel, speed):
   creep_brake = 0.0
   creep_speed = 2.3
@@ -460,8 +462,11 @@ class CarInterface(CarInterfaceBase):
       buttonEvents.append(be)
     ret.buttonEvents = buttonEvents
 
+    # gear except P, R
+    extra_gears = [GearShifter.neutral, GearShifter.eco, GearShifter.manumatic, GearShifter.drive, GearShifter.sport, GearShifter.low, GearShifter.brake, GearShifter.unknown]
+
     # events
-    events = self.create_common_events(ret)
+    events = self.create_common_events(ret, extra_gears)
     if self.CS.brake_error:
       events.append(create_event('brakeUnavailable', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE, ET.PERMANENT]))
     if self.CS.brake_hold and self.CS.CP.carFingerprint not in HONDA_BOSCH:
