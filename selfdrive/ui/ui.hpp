@@ -151,6 +151,10 @@ typedef struct UIScene {
   bool leftBlinker;
   bool rightBlinker;
   int blinker_blinkingrate;
+  float lead_distance;
+  int lead_distance_warning_rate;
+
+  char car_fingerprint[64];
 
   // Used to show gps planner status
   bool gps_planner_active;
@@ -207,6 +211,8 @@ typedef struct UIState {
   int img_battery_charging;
   int img_network[6];
   int img_brake;
+  int img_leadcar_far;
+  int img_leadcar_medium;
 
   // sockets
   Context *ctx;
@@ -220,6 +226,7 @@ typedef struct UIState {
   SubSocket *health_sock;
   SubSocket *ubloxgnss_sock;
   SubSocket *carstate_sock;
+  SubSocket *carparams_sock;
   SubSocket *livempc_sock;
   Poller * poller;
   Poller * ublox_poller;

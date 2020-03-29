@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <string.h>
 #include "ui.hpp"
 
 #include "common/util.h"
@@ -788,6 +789,76 @@ static void ui_draw_vision_brake(UIState *s) {
   nvgFill(s->vg);
 }
 
+static void ui_draw_vision_leadcar(UIState *s) {
+  const UIScene *scene = &s->scene;
+  const int leadcar_size = 96;
+  const int leadcar_x = (scene->ui_viz_rx + (leadcar_size * 7) + (bdr_s * 5));
+  const int leadcar_y = (footer_y + ((footer_h - leadcar_size) / 2));
+  const int leadcar_img_size = (leadcar_size * 1.5);
+  const int leadcar_img_x = (leadcar_x - (leadcar_img_size / 2));
+  const int leadcar_img_y = (leadcar_y - (leadcar_size / 4));
+
+  bool leadcar_valid = false;
+  float lead_dist = 0;
+  if (
+    strcmp(scene->car_fingerprint, "HONDA ACCORD 2018 SPORT 2T") == 0 ||
+    strcmp(scene->car_fingerprint, "HONDA ACCORD 2018 LX 1.5T") == 0 ||
+    strcmp(scene->car_fingerprint, "HONDA ACCORD 2018 HYBRID TOURING") == 0 ||
+    strcmp(scene->car_fingerprint, "HONDA INSIGHT 2019 TOURING") == 0
+  ) {
+    // from RADAR_HUD (CAR.ACCORD, CAR.ACCORD_15, CAR.ACCORDH, CAR.INSIGHT)
+    leadcar_valid = scene->lead_distance > 0 && scene->lead_distance <= 115;
+    if (leadcar_valid) lead_dist = scene->lead_distance;
+  } else {
+    // from radarState.leadOne
+    leadcar_valid = scene->lead_status;
+    if (leadcar_valid) lead_dist = scene->lead_d_rel;
+  }
+
+  //active icon
+  float leadcar_img_alpha = leadcar_valid ? 1.0f : 0.15f;
+  float leadcar_bg_alpha = leadcar_valid ? 0.3f : 0.1f;
+
+  //change icon
+  int img = s->img_leadcar_far;
+  if (lead_dist > 0 && lead_dist < 1) {
+    //blink icon
+    s->scene.lead_distance_warning_rate -= 9;
+    if(s->scene.lead_distance_warning_rate<0) s->scene.lead_distance_warning_rate = 120;
+    img = s->scene.lead_distance_warning_rate >= 50 ? s->img_leadcar_far : s->img_leadcar_medium;
+  } else if (lead_dist >= 1 && lead_dist < 3) {
+    img = s->img_leadcar_medium;
+  } else {
+    img = s->img_leadcar_far;
+  }
+
+  // lead_distance string
+  char lead_dist_str[8];
+  if (leadcar_valid) {
+    snprintf(lead_dist_str, sizeof(lead_dist_str), "%6.2fm", lead_dist);
+  } else {
+    snprintf(lead_dist_str, sizeof(lead_dist_str), "%s", "");
+  }
+
+  nvgFontSize(s->vg, 40);
+  nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
+  nvgText(s->vg, leadcar_x , leadcar_y + 118, lead_dist_str, NULL);
+
+  NVGcolor leadcar_bg = nvgRGBA(0, 0, 0, (255 * leadcar_bg_alpha));
+  NVGpaint leadcar_img = nvgImagePattern(s->vg, leadcar_img_x, leadcar_img_y - 10,
+    leadcar_img_size, leadcar_img_size, 0, img, leadcar_img_alpha);
+
+  nvgBeginPath(s->vg);
+  nvgCircle(s->vg, leadcar_x, (leadcar_y + (bdr_s * 1.5)), leadcar_size);
+  nvgFillColor(s->vg, leadcar_bg);
+  nvgFill(s->vg);
+
+  nvgBeginPath(s->vg);
+  nvgRect(s->vg, leadcar_img_x, leadcar_img_y - 10, leadcar_img_size, leadcar_img_size + 10);
+  nvgFillPaint(s->vg, leadcar_img);
+  nvgFill(s->vg);
+}
+
 static void ui_draw_dashcam_button(UIState *s) {
   int btn_w = 150;
   int btn_h = 150;
@@ -846,11 +917,12 @@ static void ui_draw_vision_footer(UIState *s) {
 
   ui_draw_vision_face(s);
   ui_draw_vision_brake(s);
+  ui_draw_vision_leadcar(s);
   ui_draw_dashcam_button(s);
 
-#ifdef SHOW_SPEEDLIMIT
-  // ui_draw_vision_map(s);
-#endif
+// #ifdef SHOW_SPEEDLIMIT
+  ui_draw_vision_map(s);
+// #endif
 }
 
 void ui_draw_vision_alert(UIState *s, int va_size, int va_color,
@@ -1078,6 +1150,12 @@ void ui_nvg_init(UIState *s) {
 
   assert(s->img_brake >= 0);
   s->img_brake = nvgCreateImage(s->vg, "../assets/img_brake_disc.png", 1);
+
+  assert(s->img_leadcar_far >= 0);
+  s->img_leadcar_far = nvgCreateImage(s->vg, "../assets/img_leadcar_far.png", 1);
+
+  assert(s->img_leadcar_medium >= 0);
+  s->img_leadcar_medium = nvgCreateImage(s->vg, "../assets/img_leadcar_medium.png", 1);
 
   assert(s->img_button_settings >= 0);
   s->img_button_settings = nvgCreateImage(s->vg, "../assets/images/button_settings.png", 1);

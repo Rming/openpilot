@@ -167,6 +167,7 @@ static void ui_init(UIState *s) {
   s->health_sock = SubSocket::create(s->ctx, "health");
   s->ubloxgnss_sock = SubSocket::create(s->ctx, "ubloxGnss");
   s->carstate_sock = SubSocket::create(s->ctx, "carState");
+  s->carparams_sock = SubSocket::create(s->ctx, "carParams");
   s->livempc_sock = SubSocket::create(s->ctx, "liveMpc");
 
   assert(s->model_sock != NULL);
@@ -178,6 +179,7 @@ static void ui_init(UIState *s) {
   assert(s->health_sock != NULL);
   assert(s->ubloxgnss_sock != NULL);
   assert(s->carstate_sock != NULL);
+  assert(s->carparams_sock != NULL);
   assert(s->livempc_sock != NULL);
 
   s->poller = Poller::create({
@@ -190,6 +192,7 @@ static void ui_init(UIState *s) {
                               s->health_sock,
                               s->ubloxgnss_sock,
                               s->carstate_sock,
+                              s->carparams_sock,
                               s->livempc_sock
                              });
 
@@ -557,10 +560,15 @@ void handle_message(UIState *s, Message * msg) {
     struct cereal_CarState datad;
     cereal_read_CarState(&datad, eventd.carState);
     s->scene.brakeLights = datad.brakeLights;
+    s->scene.lead_distance = datad.leadDistance;
     if(s->scene.leftBlinker!=datad.leftBlinker || s->scene.rightBlinker!=datad.rightBlinker)
       s->scene.blinker_blinkingrate = 100;
     s->scene.leftBlinker = datad.leftBlinker;
     s->scene.rightBlinker = datad.rightBlinker;
+  } else if (eventd.which == cereal_Event_carParams) {
+    struct cereal_CarParams datad;
+    cereal_read_CarParams(&datad, eventd.carParams);
+    snprintf(s->scene.car_fingerprint, sizeof(s->scene.car_fingerprint), "%s", datad.carFingerprint.str);
   }
   capn_free(&ctx);
 }

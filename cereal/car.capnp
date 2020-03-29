@@ -143,6 +143,7 @@ struct CarState {
   # afa fork's field
   readdistancelines @35 :Float32;
   lkMode @36 :Bool;
+  leadDistance @37 :Float32;
 
 
   # lock info

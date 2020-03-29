@@ -6,6 +6,8 @@ from opendbc.can.parser import CANParser
 from selfdrive.config import Conversions as CV
 from selfdrive.car.interfaces import CarStateBase
 from selfdrive.car.honda.values import CAR, DBC, STEER_THRESHOLD, SPEED_FACTOR, HONDA_BOSCH
+from selfdrive.car.honda.lead_distance_table import lead_distance_table
+
 
 def calc_cruise_offset(offset, speed):
   # euristic formula so that speed is controlled to ~ 0.3m/s below pid_speed
@@ -197,6 +199,10 @@ class CarState(CarStateBase):
       ret.standstill = cp.vl["ENGINE_DATA"]['XMISSION_SPEED'] < 0.1
       ret.doorOpen = bool(cp.vl["SCM_FEEDBACK"]['DRIVERS_DOOR_OPEN'])
       self.lead_distance = cp.vl["RADAR_HUD"]['LEAD_DISTANCE']
+      if self.lead_distance <= 236 and self.lead_distance > 0:
+        ret.leadDistance = lead_distance_table[self.lead_distance]
+      else:
+        ret.leadDistance = 0
     elif self.CP.carFingerprint in (CAR.CIVIC_BOSCH, CAR.CRV_HYBRID, CAR.CIVIC_BOSCH_DIESEL):
       ret.standstill = cp.vl["ENGINE_DATA"]['XMISSION_SPEED'] < 0.1
       ret.doorOpen = bool(cp.vl["SCM_FEEDBACK"]['DRIVERS_DOOR_OPEN'])
