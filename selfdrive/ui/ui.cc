@@ -284,7 +284,7 @@ struct tm get_time_struct() {
 }
 
 void toggle_dashcam_start() {
-  const char *dashcam_root = "/data/media/0/dashcam/";
+  const char *dashcam_root = "/sdcard/dashcam/";
   char *env_dashcam_root = getenv("DASHCAM_ROOT");
   dashcam_root = env_dashcam_root ? env_dashcam_root : dashcam_root;
 

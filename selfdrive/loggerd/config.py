@@ -12,7 +12,7 @@ if os.environ.get('DASHCAM_ROOT', False):
   DASHCAM_ROOT = os.environ['DASHCAM_ROOT']
   print("Custom dashcam root: ", DASHCAM_ROOT)
 else:
-  DASHCAM_ROOT = '/data/media/0/dashcam/'
+  DASHCAM_ROOT = '/sdcard/dashcam/'
 
 
 SEGMENT_LENGTH = 60
