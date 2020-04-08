@@ -44,9 +44,9 @@ forks = {
         },
     },
     'arne':{
-        'branch_url' :githubApiBase + '/repos/arne182/openpilot/branches',
+        'branch_url' :githubApiBase + '/repos/arne182/opeMpilot/branches',
         'cdn' :{
-            'default' :'https://github.com/arne182/openpilot',
+            'default' :'https://github.com/arne182/opeMpilot',
             'cn'      :'https://gitee.com/afaaa/arne182',
         },
     },
