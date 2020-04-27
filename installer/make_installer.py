@@ -12,42 +12,42 @@ forks = {
         'branch_url' :githubApiBase + '/repos/commaai/openpilot/branches',
         'cdn' :{
             'default' :'https://github.com/commaai/openpilot',
-            'cn'      :'https://gitee.com/afaaa/openpilot',
+            'cn'      :'https://github.com.cnpmjs.org/commaai/openpilot',
         },
     },
     'afa':{
         'branch_url' :githubApiBase + '/repos/rming/openpilot/branches',
         'cdn' :{
             'default' :'https://github.com/rming/openpilot',
-            'cn'      :'https://gitee.com/afaaa/openpilot-cn',
+            'cn'      :'https://github.com.cnpmjs.org/rming/openpilot',
         },
     },
     'dragonpilot':{
         'branch_url' :githubApiBase + '/repos/dragonpilot-community/dragonpilot/branches',
         'cdn' :{
             'default' :'https://github.com/dragonpilot-community/dragonpilot',
-            'cn'      :'https://gitee.com/afaaa/dragonpilot',
+            'cn'      :'https://github.com.cnpmjs.org/dragonpilot-community/dragonpilot',
         },
     },
     'kegman':{
         'branch_url' :githubApiBase + '/repos/kegman/openpilot/branches',
         'cdn' :{
             'default' :'https://github.com/kegman/openpilot',
-            'cn'      :'https://gitee.com/afaaa/kegman',
+            'cn'      :'https://github.com.cnpmjs.org/kegman/openpilot',
         },
     },
     'gernby':{
         'branch_url' :githubApiBase + '/repos/gernby/openpilot/branches',
         'cdn' :{
             'default' :'https://github.com/gernby/openpilot',
-            'cn'      :'https://gitee.com/afaaa/gernby',
+            'cn'      :'https://github.com.cnpmjs.org/gernby/openpilot',
         },
     },
     'arne':{
-        'branch_url' :githubApiBase + '/repos/arne182/opeMpilot/branches',
+        'branch_url' :githubApiBase + '/repos/arne182/ArnePilot/branches',
         'cdn' :{
-            'default' :'https://github.com/arne182/opeMpilot',
-            'cn'      :'https://gitee.com/afaaa/arne182',
+            'default' :'https://github.com/arne182/ArnePilot',
+            'cn'      :'https://github.com.cnpmjs.org/arne182/ArnePilot',
         },
     },
 }
