@@ -18,6 +18,10 @@ from selfdrive.loggerd.uploaders.qiniu_uploader import QiniuUploader
 from common import android
 from common.params import Params
 from common.api import Api
+from common.xattr import getxattr, setxattr
+
+UPLOAD_ATTR_NAME = 'user.upload'
+UPLOAD_ATTR_VALUE = b'1'
 
 fake_upload = os.getenv("FAKEUPLOAD") is not None
 custom_upload = os.getenv("CUSTOMUPLOAD") is not None
@@ -88,7 +92,7 @@ def is_on_hotspot():
     is_entune = result.startswith('10.0.2.')
 
     return (is_android or is_ios or is_entune)
-  except:
+  except Exception:
     return False
 
 class Uploader():
@@ -112,15 +116,6 @@ class Uploader():
       qiniuSK = params.get("AfaQiniuSK").decode('utf8')
       self.worker = QiniuUploader(qiniuAK, qiniuSK)
 
-  def clean_dirs(self):
-    try:
-      for logname in os.listdir(self.root):
-        path = os.path.join(self.root, logname)
-        # remove empty directories
-        if not os.listdir(path):
-          os.rmdir(path)
-    except OSError:
-      cloudlog.exception("clean_dirs failed")
 
   def get_upload_sort(self, name):
     if name in self.immediate_priority:
@@ -144,6 +139,14 @@ class Uploader():
       for name in sorted(names, key=self.get_upload_sort):
         key = os.path.join(logname, name)
         fn = os.path.join(path, name)
+        # skip files already uploaded
+        try:
+          is_uploaded = getxattr(fn, UPLOAD_ATTR_NAME)
+        except OSError:
+          cloudlog.event("uploader_getxattr_failed", exc=self.last_exc, key=key, fn=fn)
+          is_uploaded = True # deleter could have deleted
+        if is_uploaded:
+          continue
 
         yield (name, key, fn)
 
@@ -170,6 +173,10 @@ class Uploader():
   def do_upload(self, key, fn):
     try:
       url_resp = self.api.get("v1.3/"+self.dongle_id+"/upload_url/", timeout=10, path=key, access_token=self.api.get_token())
+      if url_resp.status_code == 412:
+        self.last_resp = url_resp
+        return
+
       url_resp_json = json.loads(url_resp.text)
       url = url_resp_json['url']
       headers = url_resp_json['headers']
@@ -213,27 +220,26 @@ class Uploader():
     cloudlog.info("checking %r with size %r", key, sz)
 
     if sz == 0:
-      # can't upload files of 0 size
-      os.unlink(fn) # delete the file
+      try:
+        # tag files of 0 size as uploaded
+        setxattr(fn, UPLOAD_ATTR_NAME, UPLOAD_ATTR_VALUE)
+      except OSError:
+        cloudlog.event("uploader_setxattr_failed", exc=self.last_exc, key=key, fn=fn, sz=sz)
       success = True
     else:
       cloudlog.info("uploading %r", fn)
       stat = self.normal_upload(key, fn)
-      if stat is not None and stat.status_code in (200, 201):
-        cloudlog.event("upload_success", key=key, fn=fn, sz=sz)
-
-        # delete the file
+      if stat is not None and stat.status_code in (200, 201, 412):
+        cloudlog.event("upload_success" if stat.status_code != 412 else "upload_ignored", key=key, fn=fn, sz=sz)
         try:
-          os.unlink(fn)
+          # tag file as uploaded
+          setxattr(fn, UPLOAD_ATTR_NAME, UPLOAD_ATTR_VALUE)
         except OSError:
-          cloudlog.event("delete_failed", stat=stat, exc=self.last_exc, key=key, fn=fn, sz=sz)
-
+          cloudlog.event("uploader_setxattr_failed", exc=self.last_exc, key=key, fn=fn, sz=sz)
         success = True
       else:
         cloudlog.event("upload_failed", stat=stat, exc=self.last_exc, key=key, fn=fn, sz=sz)
         success = False
-
-    self.clean_dirs()
 
     return success
 
