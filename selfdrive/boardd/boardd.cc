@@ -142,7 +142,8 @@ void *safety_setter_thread(void *s) {
   safety_setter_thread_initialized = false;
 
   libusb_control_transfer(dev_handle, 0x40, 0xdc, safety_model, safety_param, NULL, 0, TIMEOUT);
-
+  // set unsafe_mode 1
+  libusb_control_transfer(dev_handle, 0x40, 0xdf, 1, 0, NULL, 0, TIMEOUT);
   pthread_mutex_unlock(&usb_lock);
 
   return NULL;
@@ -631,7 +632,7 @@ void *can_send_thread(void *crap) {
   while (!do_exit) {
     can_send(subscriber);
   }
-  
+
   delete subscriber;
   delete context;
   return NULL;
