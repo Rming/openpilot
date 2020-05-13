@@ -164,11 +164,11 @@ static void ui_draw_sidebar_panda_metric(UIState *s) {
 
 static void ui_draw_sidebar_connectivity(UIState *s) {
   if (s->scene.athenaStatus == NET_DISCONNECTED) {
-    ui_draw_sidebar_metric(s, NULL, NULL, 1, 180+158, "Comma 服务\n离线");
+    ui_draw_sidebar_metric(s, NULL, NULL, 1, 180+158, "Athena\n离线");
   } else if (s->scene.athenaStatus == NET_CONNECTED) {
-    ui_draw_sidebar_metric(s, NULL, NULL, 0, 180+158, "Comma 服务\n在线");
+    ui_draw_sidebar_metric(s, NULL, NULL, 0, 180+158, "Athena\n在线");
   } else {
-    ui_draw_sidebar_metric(s, NULL, NULL, 2, 180+158, "Comma 服务\n错误");
+    ui_draw_sidebar_metric(s, NULL, NULL, 2, 180+158, "Athena\n错误");
   }
 }
 

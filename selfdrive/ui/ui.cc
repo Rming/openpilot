@@ -136,7 +136,7 @@ static void handle_vision_touch(UIState *s, int touch_x, int touch_y) {
 
 
 static bool handle_dashcam_button_touch(UIState *s, int touch_x, int touch_y) {
-  if (s->vision_connected && (s->active_app != cereal_UiLayoutState_App_settings)) {
+  if (s->vision_connected && (s->active_app != cereal::UiLayoutState::App::SETTINGS)) {
     if (touch_x >= 1660 && touch_x <= 1810) {
       if (touch_y >= 885 && touch_y <= 1035) {
         return true;
@@ -449,9 +449,6 @@ void handle_message(UIState *s,  Message* msg) {
   if (which == cereal::Event::CONTROLS_STATE && s->started) {
     auto data = event.getControlsState();
 
-    struct cereal_ControlsState_LateralPIDState pdata;
-    cereal_read_ControlsState_LateralPIDState(&pdata, datad.lateralControlState.pidState);
-
     s->controls_timeout = 1 * UI_FREQ;
     scene.frontview = data.getRearViewCam();
     if (!scene.frontview){ s->controls_seen = true; }
@@ -466,6 +463,7 @@ void handle_message(UIState *s,  Message* msg) {
     scene.engageable = data.getEngageable();
     scene.gps_planner_active = data.getGpsPlannerActive();
     scene.monitoring_active = data.getDriverMonitoringOn();
+    scene.steerOverride = data.getSteerOverride();
 
     scene.decel_for_model = data.getDecelForModel();
     auto alert_sound = data.getAlertSound();
@@ -574,19 +572,17 @@ void handle_message(UIState *s,  Message* msg) {
   } else if (which == cereal::Event::HEALTH) {
     scene.hwType = event.getHealth().getHwType();
     s->hardware_timeout = 5*30; // 5 seconds at 30 fps
-  } else if (eventd.which == cereal_Event_carState) {
-    struct cereal_CarState datad;
-    cereal_read_CarState(&datad, eventd.carState);
-    s->scene.brakeLights = datad.brakeLights;
-    s->scene.lead_distance = datad.leadDistance;
-    if(s->scene.leftBlinker!=datad.leftBlinker || s->scene.rightBlinker!=datad.rightBlinker)
-      s->scene.blinker_blinkingrate = 100;
-    s->scene.leftBlinker = datad.leftBlinker;
-    s->scene.rightBlinker = datad.rightBlinker;
-  } else if (eventd.which == cereal_Event_carParams) {
-    struct cereal_CarParams datad;
-    cereal_read_CarParams(&datad, eventd.carParams);
-    snprintf(s->scene.car_fingerprint, sizeof(s->scene.car_fingerprint), "%s", datad.carFingerprint.str);
+  } else if (which == cereal::Event::CAR_STATE) {
+    auto data = event.getCarState();
+    scene.brakeLights = data.getBrakeLights();
+    scene.lead_distance = data.getLeadDistance();
+    if(scene.leftBlinker!=data.getLeftBlinker() || scene.rightBlinker!=data.getRightBlinker())
+      scene.blinker_blinkingrate = 100;
+    scene.leftBlinker = data.getLeftBlinker();
+    scene.rightBlinker = data.getRightBlinker();
+  } else if (which == cereal::Event::CAR_PARAMS) {
+    auto data = event.getCarParams();
+    snprintf(scene.car_fingerprint, sizeof(scene.car_fingerprint), "%s", data.getCarFingerprint());
   } else if (which == cereal::Event::DRIVER_STATE) {
     auto data = event.getDriverState();
     scene.face_prob = data.getFaceProb();

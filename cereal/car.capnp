@@ -149,9 +149,9 @@ struct CarState {
   rightBlinker @21 :Bool;
   genericToggle @23 :Bool;
   # afa fork's field
-  readdistancelines @35 :Float32;
-  lkMode @36 :Bool;
-  leadDistance @37 :Float32;
+  readdistancelines @37 :Float32;
+  lkMode @38 :Bool;
+  leadDistance @39 :Float32;
 
 
   # lock info
