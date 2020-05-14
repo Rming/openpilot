@@ -122,7 +122,7 @@ ALERTS = [
       "注意路况",
       "注意力不集中",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarning2, .1, .1, .1),
+      Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarning2Repeat, .1, .1, .1),
 
   Alert(
       "driverDistracted",
@@ -143,7 +143,7 @@ ALERTS = [
       "请手扶方向盘",
       "驾驶员没有响应",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarning2, .1, .1, .1),
+      Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarning2Repeat, .1, .1, .1),
 
   Alert(
       "driverUnresponsive",
@@ -505,6 +505,13 @@ ALERTS = [
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 2.2, 3., 4.),
 
+  Alert(
+      "relayMalfunction",
+      "立即接管",
+      "Harness 故障",
+      AlertStatus.critical, AlertSize.full,
+      Priority.HIGHEST, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, 2.2, 3., 4.),
+
   # not loud cancellations (user is in control)
   Alert(
       "noTarget",
@@ -517,6 +524,13 @@ ALERTS = [
       "speedTooLow",
       "系统已退出",
       "车速过慢",
+      AlertStatus.normal, AlertSize.mid,
+      Priority.HIGH, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
+
+  Alert(
+      "speedTooHigh",
+      "车速过快",
+      "请减速后重新启用",
       AlertStatus.normal, AlertSize.mid,
       Priority.HIGH, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
@@ -689,6 +703,21 @@ ALERTS = [
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
 
+  Alert(
+      "speedTooHighNoEntry",
+      "车速过快",
+      "请减速后启用",
+      AlertStatus.normal, AlertSize.mid,
+      Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
+
+  Alert(
+      "relayMalfunctionNoEntry",
+      "系统不可用",
+      "Harness 故障",
+      AlertStatus.normal, AlertSize.mid,
+      Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
+
+
   # permanent alerts
   Alert(
       "steerUnavailablePermanent",
@@ -722,6 +751,13 @@ ALERTS = [
       "invalidGiraffeToyotaPermanent",
       "Giraffe 配置不可用",
       "请查看 comma.ai/tg",
+      AlertStatus.normal, AlertSize.mid,
+      Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
+
+  Alert(
+      "invalidLkasSettingPermanent",
+      "原车 LKAS 已启用",
+      "关闭原车 LKAS 后启动",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
@@ -768,13 +804,19 @@ ALERTS = [
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
 
   Alert(
+      "relayMalfunctionPermanent",
+      "Harness 故障",
+      "请检查硬件设备",
+      AlertStatus.normal, AlertSize.mid,
+      Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
+
+  Alert(
       "vehicleModelInvalid",
       "车型参数获取失败",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOWEST, VisualAlert.steerRequired, AudibleAlert.none, .0, .0, .1),
 
-  # offroad alerts
   Alert(
       "ldwPermanent",
       "请求接管",
