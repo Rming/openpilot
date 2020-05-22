@@ -214,7 +214,7 @@ class DriverStatus():
       self.hi_stds = 0
 
   def update(self, events, driver_engaged, ctrl_active, standstill):
-    if (driver_engaged and self.awareness > 0) or not ctrl_active or not self.face_detected:
+    if (driver_engaged and self.awareness > 0) or not ctrl_active:
       # reset only when on disengagement if red reached
       self.awareness = 1.
       self.awareness_active = 1.
@@ -225,8 +225,7 @@ class DriverStatus():
     awareness_prev = self.awareness
 
     if self.face_detected and self.hi_stds * DT_DMON > _HI_STD_TIMEOUT:
-      # events.append(create_event('driverMonitorLowAcc', [ET.WARNING]))
-      pass
+      events.append(create_event('driverMonitorLowAcc', [ET.WARNING]))
 
     if (driver_attentive and self.face_detected and self.pose.low_std and self.awareness > 0):
       # only restore awareness when paying attention and alert is not red
