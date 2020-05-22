@@ -1,4 +1,6 @@
-<a href="#fork-preview"><img width="500" align="center" id="fork-preview" src="https://doc.sdut.me/files/afa_op.jpg"></a>
+<a href="#fork-preview"><img width="500" align="center" id="fork-preview" src="https://doc.sdut.me/files/preview_settings.gif"></a>
+
+<a href="https://www.bilibili.com/video/BV1be411p75R"><img width="500" align="center" id="fork-preview" src="https://doc.sdut.me/files/preview_videos.jpg"></a>
 
 Fork of openpilot
 =======================
@@ -50,7 +52,7 @@ Features
  * 可配置的 EON 基础屏幕亮度，在此基础上支持光感
  * 可配置的 EON 低电量关机电量比例
  * 车辆启动后可以在 EON 界面开启/关闭行车录像
- * 检测不到人脸时忽略驾驶员监控，支持直接遮挡摄像头
+ * 可以在 EON 界面禁用驾驶员监控
  * 可以在 EON 界面选择车型，有效减少未识别车型报错
  * 可配置无电池模式，禁用充电控制、忽略电池温度检测
  * 打开设置页面可查看 IP 地址
