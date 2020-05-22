@@ -213,8 +213,8 @@ class DriverStatus():
     elif self.face_detected and self.pose.low_std:
       self.hi_stds = 0
 
-  def update(self, events, driver_engaged, ctrl_active, standstill):
-    if (driver_engaged and self.awareness > 0) or not ctrl_active:
+  def update(self, events, driver_engaged, ctrl_active, standstill, is_dm_enabled):
+    if (driver_engaged and self.awareness > 0) or not ctrl_active or not is_dm_enabled:
       # reset only when on disengagement if red reached
       self.awareness = 1.
       self.awareness_active = 1.

@@ -117,6 +117,7 @@ keys = {
   "AfaChargeBatPercentMin": [TxType.PERSISTENT],
   "AfaChargeBatPercentMax": [TxType.PERSISTENT],
   "AfaNoBatMode": [TxType.PERSISTENT],
+  "AfaIsDMEnabled": [TxType.PERSISTENT],
   "AfaAllowGas": [TxType.PERSISTENT],
   "AfaQiniuAK": [TxType.PERSISTENT],
   "AfaQiniuSK": [TxType.PERSISTENT],

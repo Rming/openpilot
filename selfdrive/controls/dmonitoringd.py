@@ -40,6 +40,9 @@ def dmonitoringd_thread(sm=None, pm=None):
   v_cruise_last = 0
   driver_engaged = False
 
+  # afa feature
+  is_dm_enabled = params.get("AfaIsDMEnabled", encoding='utf8') == "1"
+
   # 10Hz <- dmonitoringmodeld
   while True:
     sm.update()
@@ -57,7 +60,7 @@ def dmonitoringd_thread(sm=None, pm=None):
                         v_cruise != v_cruise_last or \
                         sm['carState'].steeringPressed
       if driver_engaged:
-        _ = driver_status.update([], True, sm['carState'].cruiseState.enabled, sm['carState'].standstill)
+        _ = driver_status.update([], True, sm['carState'].cruiseState.enabled, sm['carState'].standstill, is_dm_enabled)
       v_cruise_last = v_cruise
 
     # Get model meta
@@ -72,7 +75,7 @@ def dmonitoringd_thread(sm=None, pm=None):
       if driver_status.terminal_alert_cnt >= MAX_TERMINAL_ALERTS or driver_status.terminal_time >= MAX_TERMINAL_DURATION:
         events.append(create_event("tooDistracted", [ET.NO_ENTRY]))
       # Update events from driver state
-      events = driver_status.update(events, driver_engaged, sm['carState'].cruiseState.enabled, sm['carState'].standstill)
+      events = driver_status.update(events, driver_engaged, sm['carState'].cruiseState.enabled, sm['carState'].standstill, is_dm_enabled)
 
       # dMonitoringState packet
       dat = messaging.new_message('dMonitoringState')

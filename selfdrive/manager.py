@@ -569,6 +569,7 @@ def main():
     ("AfaChargeBatPercentMin", "60"),
     ("AfaChargeBatPercentMax", "80"),
     ("AfaNoBatMode", "0"),
+    ("AfaIsDMEnabled", "1"),
     ("AfaAllowGas", "1"),
     ("AfaQiniuAK", ""),
     ("AfaQiniuSK", ""),
