@@ -1,3 +1,5 @@
+# This Python file uses the following encoding: utf-8
+# -*- coding: utf-8 -*-
 from cereal import log, car
 
 from selfdrive.config import Conversions as CV
@@ -130,21 +132,21 @@ class Alert:
 class NoEntryAlert(Alert):
   def __init__(self, alert_text_2, audible_alert=AudibleAlert.chimeError,
                visual_alert=VisualAlert.none, duration_hud_alert=2.):
-    super().__init__("openpilot Unavailable", alert_text_2, AlertStatus.normal,
+    super().__init__("系统不可用", alert_text_2, AlertStatus.normal,
                      AlertSize.mid, Priority.LOW, visual_alert,
                      audible_alert, .4, duration_hud_alert, 3.)
 
 
 class SoftDisableAlert(Alert):
   def __init__(self, alert_text_2):
-    super().__init__("TAKE CONTROL IMMEDIATELY", alert_text_2,
+    super().__init__("立即接管", alert_text_2,
                      AlertStatus.critical, AlertSize.full,
                      Priority.MID, VisualAlert.steerRequired,
                      AudibleAlert.chimeWarningRepeat, .1, 2., 2.),
 
 
 class ImmediateDisableAlert(Alert):
-  def __init__(self, alert_text_2, alert_text_1="TAKE CONTROL IMMEDIATELY"):
+  def __init__(self, alert_text_2, alert_text_1="立即接管"):
     super().__init__(alert_text_1, alert_text_2,
                      AlertStatus.critical, AlertSize.full,
                      Priority.HIGHEST, VisualAlert.steerRequired,
@@ -159,19 +161,19 @@ class EngagementAlert(Alert):
 
 def below_steer_speed_alert(CP, sm, metric):
   speed = CP.minSteerSpeed * (CV.MS_TO_KPH if metric else CV.MS_TO_MPH)
-  unit = "kph" if metric else "mph"
+  unit = "km/h" if metric else "mph"
   return Alert(
-    "TAKE CONTROL",
-    "Steer Unavailable Below %d %s" % (speed, unit),
+    "请求接管",
+    "自动转向暂不可用，车速低于 %d %s" % (speed, unit),
     AlertStatus.userPrompt, AlertSize.mid,
     Priority.MID, VisualAlert.steerRequired, AudibleAlert.none, 0., 0.4, .3)
 
 def calibration_incomplete_alert(CP, sm, metric):
   speed = int(Filter.MIN_SPEED * (CV.MS_TO_KPH if metric else CV.MS_TO_MPH))
-  unit = "kph" if metric else "mph"
+  unit = "km/h" if metric else "mph"
   return Alert(
-    "Calibration in Progress: %d%%" % sm['liveCalibration'].calPerc,
-    "Drive Above %d %s" % (speed, unit),
+    "正在校准摄像头: %d%%" % sm['liveCalibration'].calPerc,
+    "车速请高于 %d %s" % (speed, unit),
     AlertStatus.normal, AlertSize.mid,
     Priority.LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., .2)
 
@@ -184,7 +186,7 @@ EVENTS = {
 
   EventName.debugAlert: {
     ET.PERMANENT: Alert(
-      "DEBUG ALERT",
+      "调试警告",
       "",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .1, .1, .1),
@@ -192,65 +194,65 @@ EVENTS = {
 
   EventName.startup: {
     ET.PERMANENT: Alert(
-      "Be ready to take over at any time",
-      "Always keep hands on wheel and eyes on road",
+      "准备好随时接管",
+      "请手扶方向盘并时刻注意路况",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
   },
 
   EventName.startupWhitePanda: {
     ET.PERMANENT: Alert(
-      "WARNING: White panda is deprecated",
-      "Upgrade to comma two or black panda",
+      "警告: 白熊猫即将停止支持",
+      "请升级为 Comma 2 或 黑熊猫",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
   },
 
   EventName.startupMaster: {
     ET.PERMANENT: Alert(
-      "WARNING: This branch is not tested",
-      "Always keep hands on wheel and eyes on road",
+      "警告: 该分支未经测试",
+      "请手扶方向盘并时刻注意路况",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
   },
 
   EventName.startupNoControl: {
     ET.PERMANENT: Alert(
-      "Dashcam mode",
-      "Always keep hands on wheel and eyes on road",
+      "行车记录模式",
+      "请手扶方向盘并时刻注意路况",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
   },
 
   EventName.startupNoCar: {
     ET.PERMANENT: Alert(
-      "Dashcam mode for unsupported car",
-      "Always keep hands on wheel and eyes on road",
+      "行车记录模式 (暂不支持的车型)",
+      "请手扶方向盘并时刻注意路况",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
   },
 
   EventName.invalidGiraffeToyota: {
     ET.PERMANENT: Alert(
-      "Unsupported Giraffe Configuration",
-      "Visit comma.ai/tg",
+      "Giraffe 配置不可用",
+      "请查看 comma.ai/tg",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
   },
 
   EventName.whitePandaUnsupported: {
     ET.PERMANENT: Alert(
-      "White Panda Is No Longer Supported",
-      "Upgrade to comma two or black panda",
+      "白熊猫已停止支持",
+      "请升级为 Comma 2 或 黑熊猫",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
-    ET.NO_ENTRY: NoEntryAlert("White panda is no longer supported"),
+    ET.NO_ENTRY: NoEntryAlert("白熊猫已停止支持"),
   },
 
   EventName.invalidLkasSetting: {
     ET.PERMANENT: Alert(
-      "Stock LKAS is turned on",
-      "Turn off stock LKAS to engage",
+      "原车 LKAS 已启用",
+      "关闭原车 LKAS 后启动",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
   },
@@ -259,55 +261,55 @@ EVENTS = {
     # LOW priority to overcome Cruise Error
     ET.PERMANENT: Alert(
       "",
-      "Community Feature Detected",
-      "Enable Community Features in Developer Settings",
+      "检测到社区功能",
+      "请在开发者设置中启用社区功能",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
   },
 
   EventName.carUnrecognized: {
     ET.PERMANENT: Alert(
-      "Dashcam Mode",
-      "Car Unrecognized",
+      "行车记录模式",
+      "未识别车型",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
   },
 
   EventName.stockAeb: {
     ET.PERMANENT: Alert(
-      "BRAKE!",
-      "Stock AEB: Risk of Collision",
+      "刹车!",
+      "原车 AEB: 碰撞预警",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.fcw, AudibleAlert.none, 1., 2., 2.),
   },
 
   EventName.stockFcw: {
     ET.PERMANENT: Alert(
-      "BRAKE!",
-      "Stock FCW: Risk of Collision",
+      "刹车!",
+      "原车 FCW: 碰撞预警",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.fcw, AudibleAlert.none, 1., 2., 2.),
   },
 
   EventName.fcw: {
     ET.PERMANENT: Alert(
-      "BRAKE!",
-      "Risk of Collision",
+      "刹车!",
+      "碰撞预警",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGHEST, VisualAlert.fcw, AudibleAlert.chimeWarningRepeat, 1., 2., 2.),
   },
 
   EventName.ldw: {
     ET.PERMANENT: Alert(
-      "TAKE CONTROL",
-      "Lane Departure Detected",
+      "请求接管",
+      "车道偏离警告",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., 2., 3.),
   },
 
   EventName.canErrorPersistent: {
     ET.PERMANENT: Alert(
-      "CAN Error: Check Connections",
+      "CAN 总线故障：请检查数据线连接",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
@@ -317,7 +319,7 @@ EVENTS = {
 
   EventName.vehicleModelInvalid: {
     ET.WARNING: Alert(
-      "Vehicle Parameter Identification Failed",
+      "车型参数获取失败",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOWEST, VisualAlert.steerRequired, AudibleAlert.none, .0, .0, .1),
@@ -325,15 +327,15 @@ EVENTS = {
 
   EventName.steerTempUnavailableMute: {
     ET.WARNING: Alert(
-      "TAKE CONTROL",
-      "Steering Temporarily Unavailable",
+      "请求接管",
+      "自动转向暂时不可用",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .2, .2, .2),
   },
 
   EventName.preDriverDistracted: {
     ET.WARNING: Alert(
-      "KEEP EYES ON ROAD: Driver Distracted",
+      "注意路况: 注意力不集中",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
@@ -341,23 +343,23 @@ EVENTS = {
 
   EventName.promptDriverDistracted: {
     ET.WARNING: Alert(
-      "KEEP EYES ON ROAD",
-      "Driver Appears Distracted",
+      "注意路况",
+      "注意力不集中",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarning2Repeat, .1, .1, .1),
   },
 
   EventName.driverDistracted: {
     ET.WARNING: Alert(
-      "DISENGAGE IMMEDIATELY",
-      "Driver Was Distracted",
+      "系统退出",
+      "注意力不集中",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGH, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, .1, .1),
   },
 
   EventName.preDriverUnresponsive: {
     ET.WARNING: Alert(
-      "TOUCH STEERING WHEEL: No Face Detected",
+      "请手扶方向盘：没有检测到驾驶员",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
@@ -365,40 +367,40 @@ EVENTS = {
 
   EventName.promptDriverUnresponsive: {
     ET.WARNING: Alert(
-      "TOUCH STEERING WHEEL",
-      "Driver Is Unresponsive",
+      "请手扶方向盘",
+      "驾驶员没有响应",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarning2Repeat, .1, .1, .1),
   },
 
   EventName.driverUnresponsive: {
     ET.WARNING: Alert(
-      "DISENGAGE IMMEDIATELY",
-      "Driver Was Unresponsive",
+      "系统退出",
+      "驾驶员没有响应",
       AlertStatus.critical, AlertSize.full,
       Priority.HIGH, VisualAlert.steerRequired, AudibleAlert.chimeWarningRepeat, .1, .1, .1),
   },
 
   EventName.driverMonitorLowAcc: {
     ET.WARNING: Alert(
-      "CHECK DRIVER FACE VISIBILITY",
-      "Driver Monitor Model Output Uncertain",
+      "没有检测到驾驶员",
+      "驾驶员监控模型输出不明确",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .4, 0., 1.),
   },
 
   EventName.manualRestart: {
     ET.WARNING: Alert(
-      "TAKE CONTROL",
-      "Resume Driving Manually",
+      "请求接管",
+      "请手动恢复行驶",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
   },
 
   EventName.resumeRequired: {
     ET.WARNING: Alert(
-      "STOPPED",
-      "Press Resume to Move",
+      "已停车",
+      "请按 RES 键继续行驶",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
   },
@@ -409,32 +411,32 @@ EVENTS = {
 
   EventName.preLaneChangeLeft: {
     ET.WARNING: Alert(
-      "Steer Left to Start Lane Change",
-      "Monitor Other Vehicles",
+      "往左打方向盘开始切换车道",
+      "请注意其他车辆",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
   },
 
   EventName.preLaneChangeRight: {
     ET.WARNING: Alert(
-      "Steer Right to Start Lane Change",
-      "Monitor Other Vehicles",
+      "往右打方向盘开始切换车道",
+      "请注意其他车辆",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
   },
 
   EventName.laneChange: {
     ET.WARNING: Alert(
-      "Changing Lane",
-      "Monitor Other Vehicles",
+      "切换车道中",
+      "请注意其他车辆",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1),
   },
 
   EventName.steerSaturated: {
     ET.WARNING: Alert(
-      "TAKE CONTROL",
-      "Turn Exceeds Steering Limit",
+      "请求接管",
+      "超出方向盘转向限制",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., 2., 3.),
   },
@@ -459,260 +461,260 @@ EVENTS = {
 
   EventName.brakeHold: {
     ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeDisengage),
-    ET.NO_ENTRY: NoEntryAlert("Brake Hold Active"),
+    ET.NO_ENTRY: NoEntryAlert("制动保持已启动"),
   },
 
   EventName.parkBrake: {
     ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeDisengage),
-    ET.NO_ENTRY: NoEntryAlert("Park Brake Engaged"),
+    ET.NO_ENTRY: NoEntryAlert("停车制动已启动"),
   },
 
   EventName.pedalPressed: {
     ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeDisengage),
-    ET.NO_ENTRY: NoEntryAlert("Pedal Pressed During Attempt",
+    ET.NO_ENTRY: NoEntryAlert("刹车踏板已踩下",
                               visual_alert=VisualAlert.brakePressed),
   },
 
   EventName.wrongCarMode: {
     ET.USER_DISABLE: EngagementAlert(AudibleAlert.chimeDisengage),
-    ET.NO_ENTRY: NoEntryAlert("Main Switch Off",
+    ET.NO_ENTRY: NoEntryAlert("主开关已关闭",
                               duration_hud_alert=0.),
   },
 
   EventName.steerTempUnavailable: {
     ET.WARNING: Alert(
-      "TAKE CONTROL",
-      "Steering Temporarily Unavailable",
+      "请求接管",
+      "自动转向暂时不可用",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimeWarning1, .4, 2., 3.),
-    ET.NO_ENTRY: NoEntryAlert("Steering Temporarily Unavailable",
+    ET.NO_ENTRY: NoEntryAlert("自动转向暂时不可用",
                               duration_hud_alert=0.),
   },
 
   EventName.posenetInvalid: {
     ET.WARNING: Alert(
-      "TAKE CONTROL",
-      "Vision Model Output Uncertain",
+      "请求接管",
+      "视觉模型输出不明确",
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimeWarning1, .4, 2., 3.),
-    ET.NO_ENTRY: NoEntryAlert("Vision Model Output Uncertain"),
+    ET.NO_ENTRY: NoEntryAlert("视觉模型输出不明确"),
   },
 
   EventName.outOfSpace: {
-    ET.NO_ENTRY: NoEntryAlert("Out of Storage Space",
+    ET.NO_ENTRY: NoEntryAlert("存储空间不足",
                               duration_hud_alert=0.),
   },
 
   EventName.belowEngageSpeed: {
-    ET.NO_ENTRY: NoEntryAlert("Speed Too Low"),
+    ET.NO_ENTRY: NoEntryAlert("车速过慢"),
   },
 
   EventName.sensorDataInvalid: {
     ET.PERMANENT: Alert(
-      "No Data from Device Sensors",
-      "Reboot your Device",
+      "设备传感器数据缺失",
+      "请重启设备",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
-    ET.NO_ENTRY: NoEntryAlert("No Data from Device Sensors"),
+    ET.NO_ENTRY: NoEntryAlert("设备传感器数据缺失"),
   },
 
   EventName.soundsUnavailable: {
     ET.PERMANENT: Alert(
-      "Speaker not found",
-      "Reboot your Device",
+      "找不到音效装置",
+      "请重启设备",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
-    ET.NO_ENTRY: NoEntryAlert("Speaker not found"),
+    ET.NO_ENTRY: NoEntryAlert("找不到音效装置"),
   },
 
   EventName.tooDistracted: {
-    ET.NO_ENTRY: NoEntryAlert("Distraction Level Too High"),
+    ET.NO_ENTRY: NoEntryAlert("注意力高度不集中"),
   },
 
   EventName.overheat: {
-    ET.SOFT_DISABLE: SoftDisableAlert("System Overheated"),
-    ET.NO_ENTRY: NoEntryAlert("System overheated"),
+    ET.SOFT_DISABLE: SoftDisableAlert("系统过热"),
+    ET.NO_ENTRY: NoEntryAlert("系统过热"),
   },
 
   EventName.wrongGear: {
-    ET.SOFT_DISABLE: SoftDisableAlert("Gear not D"),
-    ET.NO_ENTRY: NoEntryAlert("Gear not D"),
+    ET.SOFT_DISABLE: SoftDisableAlert("请切换到 D 档"),
+    ET.NO_ENTRY: NoEntryAlert("请切换到 D 档"),
   },
 
   EventName.calibrationInvalid: {
-    ET.SOFT_DISABLE: SoftDisableAlert("Calibration Invalid: Reposition Device and Recalibrate"),
-    ET.NO_ENTRY: NoEntryAlert("Calibration Invalid: Reposition Device & Recalibrate"),
+    ET.SOFT_DISABLE: SoftDisableAlert("校准失败：请调整设备的位置后重新校准"),
+    ET.NO_ENTRY: NoEntryAlert("校准失败：请调整设备的位置后重新校准"),
   },
 
   EventName.calibrationIncomplete: {
-    ET.SOFT_DISABLE: SoftDisableAlert("Calibration in Progress"),
+    ET.SOFT_DISABLE: SoftDisableAlert("正在校准摄像头"),
     ET.PERMANENT: calibration_incomplete_alert,
-    ET.NO_ENTRY: NoEntryAlert("Calibration in Progress"),
+    ET.NO_ENTRY: NoEntryAlert("正在校准摄像头"),
   },
 
   EventName.doorOpen: {
-    ET.SOFT_DISABLE: SoftDisableAlert("Door Open"),
-    ET.NO_ENTRY: NoEntryAlert("Door open"),
+    ET.SOFT_DISABLE: SoftDisableAlert("车门未关好"),
+    ET.NO_ENTRY: NoEntryAlert("车门未关好"),
   },
 
   EventName.seatbeltNotLatched: {
-    ET.SOFT_DISABLE: SoftDisableAlert("Seatbelt Unlatched"),
-    ET.NO_ENTRY: NoEntryAlert("Seatbelt unlatched"),
+    ET.SOFT_DISABLE: SoftDisableAlert("安全带未系好"),
+    ET.NO_ENTRY: NoEntryAlert("安全带未系好"),
   },
 
   EventName.espDisabled: {
-    ET.SOFT_DISABLE: SoftDisableAlert("ESP Off"),
-    ET.NO_ENTRY: NoEntryAlert("ESP Off"),
+    ET.SOFT_DISABLE: SoftDisableAlert("ESP 未打开"),
+    ET.NO_ENTRY: NoEntryAlert("ESP 未打开"),
   },
 
   EventName.lowBattery: {
-    ET.SOFT_DISABLE: SoftDisableAlert("Low Battery"),
-    ET.NO_ENTRY: NoEntryAlert("Low Battery"),
+    ET.SOFT_DISABLE: SoftDisableAlert("电池电量过低"),
+    ET.NO_ENTRY: NoEntryAlert("电池电量过低"),
   },
 
   EventName.commIssue: {
-    ET.SOFT_DISABLE: SoftDisableAlert("Communication Issue between Processes"),
-    ET.NO_ENTRY: NoEntryAlert("Communication Issue between Processes",
+    ET.SOFT_DISABLE: SoftDisableAlert("进程通信异常"),
+    ET.NO_ENTRY: NoEntryAlert("进程通信异常",
                               audible_alert=AudibleAlert.chimeDisengage),
   },
 
   EventName.radarCommIssue: {
-    ET.SOFT_DISABLE: SoftDisableAlert("Radar Communication Issue"),
-    ET.NO_ENTRY: NoEntryAlert("Radar Communication Issue",
+    ET.SOFT_DISABLE: SoftDisableAlert("雷达通信异常"),
+    ET.NO_ENTRY: NoEntryAlert("雷达通信异常",
                               audible_alert=AudibleAlert.chimeDisengage),
   },
 
   EventName.radarCanError: {
-    ET.SOFT_DISABLE: SoftDisableAlert("Radar Error: Restart the Car"),
-    ET.NO_ENTRY: NoEntryAlert("Radar Error: Restart the Car"),
+    ET.SOFT_DISABLE: SoftDisableAlert("雷达总线故障：请重新启动车辆"),
+    ET.NO_ENTRY: NoEntryAlert("雷达总线故障：请重新启动车辆"),
   },
 
   EventName.radarFault: {
-    ET.SOFT_DISABLE: SoftDisableAlert("Radar Error: Restart the Car"),
-    ET.NO_ENTRY : NoEntryAlert("Radar Error: Restart the Car"),
+    ET.SOFT_DISABLE: SoftDisableAlert("雷达系统故障：请重新启动车辆"),
+    ET.NO_ENTRY : NoEntryAlert("雷达系统故障：请重新启动车辆"),
   },
 
   EventName.lowMemory: {
-    ET.SOFT_DISABLE: SoftDisableAlert("Low Memory: Reboot Your Device"),
+    ET.SOFT_DISABLE: SoftDisableAlert("剩余内存不足: 请重启设备"),
     ET.PERMANENT: Alert(
-      "RAM Critically Low",
-      "Reboot your Device",
+      "剩余内存不足",
+      "请重启设备",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
-    ET.NO_ENTRY : NoEntryAlert("Low Memory: Reboot Your Device",
+    ET.NO_ENTRY : NoEntryAlert("剩余内存不足: 请重启设备",
                                audible_alert=AudibleAlert.chimeDisengage),
   },
 
   EventName.controlsFailed: {
-    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("Controls Failed"),
-    ET.NO_ENTRY: NoEntryAlert("Controls Failed"),
+    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("车辆控制故障"),
+    ET.NO_ENTRY: NoEntryAlert("车辆控制故障"),
   },
 
   EventName.controlsMismatch: {
-    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("Controls Mismatch"),
+    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("车辆控制不符"),
   },
 
   EventName.canError: {
-    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("CAN Error: Check Connections"),
-    ET.NO_ENTRY: NoEntryAlert("CAN Error: Check Connections"),
+    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("CAN 总线故障：请检查数据线连接"),
+    ET.NO_ENTRY: NoEntryAlert("CAN 总线故障：请检查数据线连接"),
   },
 
   EventName.steerUnavailable: {
-    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("LKAS Fault: Restart the Car"),
+    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("LKAS 故障：请重新启动车辆"),
     ET.PERMANENT: Alert(
-      "LKAS Fault: Restart the car to engage",
+      "LKAS 故障：请重新启动车辆后启用",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
-    ET.NO_ENTRY: NoEntryAlert("LKAS Fault: Restart the Car"),
+    ET.NO_ENTRY: NoEntryAlert("LKAS 故障：请重新启动车辆"),
   },
 
   EventName.brakeUnavailable: {
-    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("Cruise Fault: Restart the Car"),
+    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("巡航系统故障：请重新启动车辆"),
     ET.PERMANENT: Alert(
-      "Cruise Fault: Restart the car to engage",
+      "巡航系统故障：请重新启动车辆后启用",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
-    ET.NO_ENTRY: NoEntryAlert("Cruise Fault: Restart the Car"),
+    ET.NO_ENTRY: NoEntryAlert("巡航系统故障：请重新启动车辆"),
   },
 
   EventName.gasUnavailable: {
-    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("Gas Fault: Restart the Car"),
-    ET.NO_ENTRY: NoEntryAlert("Gas Error: Restart the Car"),
+    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("油门故障：请重新启动车辆"),
+    ET.NO_ENTRY: NoEntryAlert("油门故障：请重新启动车辆"),
   },
 
   EventName.reverseGear: {
-    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("Reverse Gear"),
-    ET.NO_ENTRY: NoEntryAlert("Reverse Gear"),
+    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("当前在 R 档"),
+    ET.NO_ENTRY: NoEntryAlert("当前在 R 档"),
   },
 
   EventName.cruiseDisabled: {
-    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("Cruise Is Off"),
+    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("巡航系统未打开"),
   },
 
   EventName.plannerError: {
-    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("Planner Solution Error"),
-    ET.NO_ENTRY: NoEntryAlert("Planner Solution Error"),
+    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("路径规划失败"),
+    ET.NO_ENTRY: NoEntryAlert("路径规划失败"),
   },
 
   EventName.relayMalfunction: {
-    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("Harness Malfunction"),
+    ET.IMMEDIATE_DISABLE: ImmediateDisableAlert("Harness 故障"),
     ET.PERMANENT: Alert(
-      "Harness Malfunction",
-      "Please Check Hardware",
+      "Harness 故障",
+      "请检查硬件设备",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
-    ET.NO_ENTRY: NoEntryAlert("Harness Malfunction"),
+    ET.NO_ENTRY: NoEntryAlert("Harness 故障"),
   },
 
   EventName.noTarget: {
     ET.IMMEDIATE_DISABLE: Alert(
-      "openpilot Canceled",
-      "No close lead car",
+      "系统已退出",
+      "没有检测到前车",
       AlertStatus.normal, AlertSize.mid,
       Priority.HIGH, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
-    ET.NO_ENTRY : NoEntryAlert("No Close Lead Car"),
+    ET.NO_ENTRY : NoEntryAlert("没有检测到前车"),
   },
 
   EventName.speedTooLow: {
     ET.IMMEDIATE_DISABLE: Alert(
-      "openpilot Canceled",
-      "Speed too low",
+      "系统已退出",
+      "车速过慢",
       AlertStatus.normal, AlertSize.mid,
       Priority.HIGH, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
   },
 
   EventName.speedTooHigh: {
     ET.WARNING: Alert(
-      "Speed Too High",
-      "Slow down to resume operation",
+      "车速过快",
+      "请减速后重新启用",
       AlertStatus.normal, AlertSize.mid,
       Priority.HIGH, VisualAlert.steerRequired, AudibleAlert.chimeWarning2Repeat, 2.2, 3., 4.),
     ET.NO_ENTRY: Alert(
-      "Speed Too High",
-      "Slow down to engage",
+      "车速过快",
+      "请减速后重新启用",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeError, .4, 2., 3.),
   },
 
   EventName.internetConnectivityNeeded: {
     ET.PERMANENT: Alert(
-      "Please connect to Internet",
-      "An Update Check Is Required to Engage",
+      "需要连接到网络",
+      "检查更新后才能启用",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
-    ET.NO_ENTRY: NoEntryAlert("Please Connect to Internet",
+    ET.NO_ENTRY: NoEntryAlert("需要连接到网络",
                               audible_alert=AudibleAlert.chimeDisengage),
   },
 
   EventName.lowSpeedLockout: {
     ET.PERMANENT: Alert(
-      "Cruise Fault: Restart the car to engage",
+      "巡航系统故障：请重新启动车辆",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, 0., 0., .2),
-    ET.NO_ENTRY: NoEntryAlert("Cruise Fault: Restart the Car"),
+    ET.NO_ENTRY: NoEntryAlert("巡航系统故障：请重新启动车辆"),
   },
 
 }
