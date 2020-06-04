@@ -184,9 +184,11 @@ class Uploader():
 
       if fake_upload:
         cloudlog.info("*** WARNING, THIS IS A FAKE UPLOAD TO %s ***" % url)
+
         class FakeResponse():
           def __init__(self):
             self.status_code = 200
+
         self.last_resp = FakeResponse()
       elif custom_upload:
         self.last_resp = self.worker.put(key, fn)

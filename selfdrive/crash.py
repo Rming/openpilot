@@ -7,13 +7,16 @@ from common.params import Params
 from selfdrive.version import version, dirty, origin, branch
 from selfdrive.swaglog import cloudlog
 
-if os.getenv("NOLOG") or os.getenv("NOCRASH"):
-  def capture_exception(*exc_info):
+if os.getenv("NOLOG") or os.getenv("NOCRASH") or not ANDROID:
+  def capture_exception(*args, **kwargs):
     pass
+
   def bind_user(**kwargs):
     pass
+
   def bind_extra(**kwargs):
     pass
+
   def install():
     pass
 else:
@@ -52,6 +55,7 @@ else:
   def install():
     # installs a sys.excepthook
     __excepthook__ = sys.excepthook
+
     def handle_exception(*exc_info):
       if exc_info[0] not in (KeyboardInterrupt, SystemExit):
         capture_exception()
